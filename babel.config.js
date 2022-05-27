@@ -11,7 +11,7 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
-
+        '@routes': './src/routes'
       }
     }]
   ],

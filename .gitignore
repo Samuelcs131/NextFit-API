@@ -1,2 +1,6 @@
 node_modules
 dist
+app
+
+# local env files
+.env*.local

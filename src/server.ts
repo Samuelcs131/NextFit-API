@@ -1,9 +1,17 @@
 import express from 'express'
-
+import clc from 'cli-color'
+import router from '@routes/endpoints'
 const app = express()
 
-app.get('/', (req, res) => {
-  return res.json({ menssage: 'Opa' })
-})
+// VARIABLES
+require('dotenv').config()
 
-app.listen(2000)
+// VARIABLES
+const PORT = process.env.PORT
+
+// ROUTER
+app.use('/', router)
+
+app.listen(process.env.PORT, () => {
+  return console.log(`🚀 ${clc.cyan('[NextFit]')} Servidor rodando em http://localhost:${PORT} 🚀`)
+})
