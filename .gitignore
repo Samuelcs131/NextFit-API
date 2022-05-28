@@ -3,3 +3,6 @@ app
 
 # local env files
 *.env
+
+# testes files
+*test.js

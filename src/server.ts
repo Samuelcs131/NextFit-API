@@ -1,13 +1,18 @@
 import express from 'express'
 import clc from 'cli-color'
 import router from '@routes/endpoints'
-const app = express()
+import cors from 'cors'
 
-// VARIABLES
+const app = express()
 require('dotenv').config()
 
 // VARIABLES
 const PORT = process.env.PORT
+
+// CONFIG EXPRESS
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // ROUTER
 app.use('/', router)
