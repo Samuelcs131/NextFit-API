@@ -10,16 +10,18 @@ const routes = express.Router()
 routes.get('/', (req: Request, res: Response) => res.send('Opa'))
 
 // USER
-routes.get('/user', userController.index)
-routes.post('/user', userController.create)
-routes.put('/user/:id', userController.update)
-routes.delete('/user/:id', userController.exclude)
+routes.get('/users', userController.index)
+routes.get('/users/:id', userController.singleUser)
+routes.post('/users', userController.create)
+routes.put('/users/:id', userController.update)
+routes.delete('/users/:id', userController.exclude)
 
 // TREINING
-routes.get('/treining', treiningController.index)
-routes.post('/treining/:id', treiningController.create)
-routes.patch('/treining/:id', treiningController.update)
-routes.delete('/treining/:id', treiningController.exclude)
+routes.get('/treinings', treiningController.index)
+routes.get('/treinings/:id', treiningController.singleTreining)
+routes.post('/treinings/:id', treiningController.create)
+routes.patch('/treinings/:id', treiningController.update)
+routes.delete('/treinings/:id', treiningController.exclude)
 
 // BODY MEASUREMENTS
 routes.get('/bodyMeasurements', bodyMeasurementsController.index)

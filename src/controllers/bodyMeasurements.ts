@@ -13,7 +13,7 @@ export const index = async (req: Request, res: Response) => {
 
     // RETURN
     console.log(clc.blue('[Pesquisa realizada!]'))
-    res.status(200).send({ measurements })
+    res.status(200).send(measurements)
 
     // ERROR!
   } catch (error) {
@@ -28,6 +28,20 @@ export const create = async (req: Request, res: Response) => {
     // PARAMS
     const idUser: string = req.params.id
     const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight }: iBodyMeasurements = req.body
+    const inputs = [abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight]
+
+    // VERIFY INPUTS
+    for (let num = 0; num < inputs.length; num++) {
+      if (typeof inputs[num] === 'string') {
+        console.log(clc.bgRed('Erro: Só seram aceitas medidas em formato de númerico!'))
+        return res.status(400).send('Erro: Só seram aceitas medidas em formato de númerico!')
+      }
+
+      if (inputs[num] === null || inputs[num] === undefined) {
+        console.log(clc.bgRed('Erro: Preencha todos os campos!'))
+        return res.status(400).send('Erro: Preencha todos os campos!')
+      }
+    }
 
     // DATE NOW
     const dateNow: string = Intl.DateTimeFormat('pt-BR', {
@@ -60,7 +74,7 @@ export const create = async (req: Request, res: Response) => {
 
     // RETURN
     console.log(clc.green('[Medida cadastrado!]'))
-    return res.status(200).send({ measurements })
+    return res.status(200).send(measurements)
 
   // ERROR!
   } catch (error) {
