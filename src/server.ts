@@ -1,7 +1,4 @@
-import express, { Request, Response } from 'express'
-/* import UserController from '@controllers/user'
-import TreiningController from '@controllers/treining'
-import BodyMeasurementsController from '@controllers/bodyMeasurements' */
+import express from 'express'
 import clc from 'cli-color'
 import cors from 'cors'
 import routes from '@routes/router'
@@ -18,14 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // ROUTERS
-app.get('/', (req: Request, res: Response) => {
-  res.send('Opa')
-})
-
 app.use('/', routes)
-/* app.use('/user', UserController)
-app.use('/treining', TreiningController)
-app.use('/bodyMeasurements', BodyMeasurementsController) */
 
 // RUNNING SERVER
 app.listen(process.env.PORT, () => {

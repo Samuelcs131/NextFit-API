@@ -1,12 +1,11 @@
-import express, { Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import clc from 'cli-color'
 
-const TreiningController = express.Router()
 const prisma = new PrismaClient()
 
 // GET
-TreiningController.get('/', async (req: Request, res: Response) => {
+export const index = async (req: Request, res: Response) => {
   try {
     // SEARCH USERS
     const training = await prisma.training.findMany()
@@ -20,10 +19,10 @@ TreiningController.get('/', async (req: Request, res: Response) => {
     console.log(clc.bgRed('Erro:'), error)
     res.status(400).send({ status: error })
   }
-})
+}
 
 // POST
-TreiningController.post('/:id', async (req, res) => {
+export const create = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const { name, weight, series } = req.body
@@ -56,10 +55,10 @@ TreiningController.post('/:id', async (req, res) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
+}
 
 // PATCH
-TreiningController.patch('/:id', async (req, res) => {
+export const update = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const { name, weight, series } = req.body
@@ -88,10 +87,10 @@ TreiningController.patch('/:id', async (req, res) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
+}
 
 // DELETE
-TreiningController.delete('/:id', async (req, res) => {
+export const exclude = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const treiningId: string = req.params.id
@@ -110,6 +109,4 @@ TreiningController.delete('/:id', async (req, res) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
-
-export default TreiningController
+}
