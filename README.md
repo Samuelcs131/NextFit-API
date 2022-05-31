@@ -4,7 +4,7 @@
 
 Primeiro, instale as dependencias:
 
-``npm i``
+``yarn``
 
 Em seguida inicie o servidor de desenvolvimento:
 

@@ -6,7 +6,7 @@ import routes from '@routes/router'
 
 const app = express()
 
-// VARIABLES
+// ENVIRONMENT VARIABLES
 const PORT = process.env.PORT
 
 // CONFIG EXPRESS
