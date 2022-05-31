@@ -51,5 +51,6 @@ model Training {
   series Int
   repetitions Json
   weight Float
+  interval Int
   createAt DateTime
 }

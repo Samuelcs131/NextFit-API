@@ -22,6 +22,27 @@ export const index = async (req: Request, res: Response) => {
   }
 }
 
+// GET
+export const singleBodyMeasurements = async (req: Request, res: Response) => {
+  try {
+    // PARAMS
+    const idMeasurements: string = req.params.id
+    // SEARCH USERS
+    const measurements = await prisma.bodyMeasurements.findUnique({
+      where: { id: idMeasurements }
+    })
+
+    // RETURN
+    console.log(clc.blue('[Pesquisa realizada!]'))
+    res.status(200).send(measurements)
+
+    // ERROR!
+  } catch (error) {
+    console.log(clc.bgRed('Erro:'), error)
+    res.status(400).send({ status: error })
+  }
+}
+
 // POST
 export const create = async (req: Request, res: Response) => {
   try {
@@ -128,11 +149,11 @@ export const update = async (req: Request, res: Response) => {
 export const exclude = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const idMenasurement: string = req.params.id
+    const idMeasurements: string = req.params.id
 
     // REGISTER MEASUREMENTS
     await prisma.bodyMeasurements.delete({
-      where: { id: idMenasurement }
+      where: { id: idMeasurements }
     })
 
     // RETURN

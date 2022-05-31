@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import * as userController from '@controllers/user'
 import * as treiningController from '@controllers/treining'
 import * as bodyMeasurementsController from '@controllers/bodyMeasurements'
+import auth from '@controllers/auth'
 
 // CONTROLLERS
 const routes = express.Router()
@@ -25,8 +26,12 @@ routes.delete('/treinings/:id', treiningController.exclude)
 
 // BODY MEASUREMENTS
 routes.get('/bodyMeasurements', bodyMeasurementsController.index)
+routes.get('/bodyMeasurements/:id', bodyMeasurementsController.singleBodyMeasurements)
 routes.post('/bodyMeasurements/:id', bodyMeasurementsController.create)
 routes.patch('/bodyMeasurements/:id', bodyMeasurementsController.update)
 routes.delete('/bodyMeasurements/:id', bodyMeasurementsController.exclude)
+
+// AUTH
+routes.post('/auth', auth)
 
 export default routes

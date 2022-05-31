@@ -13,7 +13,8 @@ module.exports = {
     ['module-resolver', {
       alias: {
         '@routes': './src/routes',
-        '@controllers': './src/controllers'
+        '@controllers': './src/controllers',
+        '@config': './src/config'
       }
     }]
   ],

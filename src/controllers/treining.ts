@@ -47,11 +47,11 @@ export const singleTreining = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const { name, weight, series } = req.body
+    const { name, weight, series, interval } = req.body
     const userId: string = req.params.id
     const Repetitions: Array<number> = req.body.repetitions
     const date: string = req.body.date.split('-').reverse().join('-')
-    const inputs = [name, weight, series, date, Repetitions]
+    const inputs = [name, weight, series, date, Repetitions, interval]
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -85,6 +85,7 @@ export const create = async (req: Request, res: Response) => {
         repetitions: Repetitions,
         series: Number(series),
         data: new Date(date),
+        interval: Number(interval),
         createAt: new Date(dateNow)
       }
     })

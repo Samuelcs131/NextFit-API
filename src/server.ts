@@ -1,16 +1,17 @@
 import 'dotenv/config'
 import express from 'express'
 import clc from 'cli-color'
-import cors from 'cors'
 import routes from '@routes/router'
+import corsConfig from '@config/cors'
+import cors from 'cors'
 
 const app = express()
 
 // ENVIRONMENT VARIABLES
 const PORT = process.env.PORT
 
-// CONFIG EXPRESS
-app.use(cors())
+// CONFIG MIDDLEWARE
+app.use(cors(corsConfig))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
