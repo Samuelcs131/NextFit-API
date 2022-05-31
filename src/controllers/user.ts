@@ -1,14 +1,13 @@
-import express, { Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { iUser } from 'src/@types/endpoints'
 import clc from 'cli-color'
 import { hash } from 'bcrypt'
 
-const UserController = express.Router()
 const prisma = new PrismaClient()
 
 // GET
-UserController.get('/', async (req: Request, res: Response) => {
+export const index = async (req: Request, res: Response) => {
   try {
     // SEARCH USERS
     const users = await prisma.user.findMany()
@@ -22,10 +21,10 @@ UserController.get('/', async (req: Request, res: Response) => {
     console.log(clc.bgRed('Erro:'), error)
     res.status(400).send({ status: error })
   }
-})
+}
 
 // POST
-UserController.post('/', async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const { name, lastName, email, password }: iUser = req.body
@@ -56,10 +55,10 @@ UserController.post('/', async (req: Request, res: Response) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
+}
 
 // PUT
-UserController.put('/:id', async (req: Request, res: Response) => {
+export const update = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idUser: string = String(req.params.id)
@@ -81,10 +80,10 @@ UserController.put('/:id', async (req: Request, res: Response) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
+}
 
 // DELETE
-UserController.delete('/:id', async (req: Request, res: Response) => {
+export const exclude = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idUser: string = String(req.params.id)
@@ -102,6 +101,4 @@ UserController.delete('/:id', async (req: Request, res: Response) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
-
-export default UserController
+}

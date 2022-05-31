@@ -70,8 +70,8 @@ BodyMeasurementsController.post('/:id', async (req, res) => {
   }
 })
 
-// PUT
-BodyMeasurementsController.put('/:id', async (req, res) => {
+// PATCH
+BodyMeasurementsController.patch('/:id', async (req, res) => {
   try {
     // PARAMS
     const idMenasurement: string = req.params.id

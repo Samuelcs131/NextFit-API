@@ -20,3 +20,10 @@ export interface iBodyMeasurements {
     rightThigh: number
     weight: number
 }
+
+export interface iTreining {
+    name: string
+    weight: number
+    repetitions: JSON
+    series: number
+}
