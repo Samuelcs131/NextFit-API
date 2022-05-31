@@ -1,13 +1,12 @@
-import express, { Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import clc from 'cli-color'
 import { iBodyMeasurements } from 'src/@types/endpoints'
 
-const BodyMeasurementsController = express.Router()
 const prisma = new PrismaClient()
 
 // GET
-BodyMeasurementsController.get('/', async (req: Request, res: Response) => {
+export const index = async (req: Request, res: Response) => {
   try {
     // SEARCH USERS
     const measurements = await prisma.bodyMeasurements.findMany()
@@ -21,10 +20,10 @@ BodyMeasurementsController.get('/', async (req: Request, res: Response) => {
     console.log(clc.bgRed('Erro:'), error)
     res.status(400).send({ status: error })
   }
-})
+}
 
 // POST
-BodyMeasurementsController.post('/:id', async (req, res) => {
+export const create = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idUser: string = req.params.id
@@ -68,10 +67,10 @@ BodyMeasurementsController.post('/:id', async (req, res) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
+}
 
 // PATCH
-BodyMeasurementsController.patch('/:id', async (req, res) => {
+export const update = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idMenasurement: string = req.params.id
@@ -109,10 +108,10 @@ BodyMeasurementsController.patch('/:id', async (req, res) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
+}
 
 // DELETE
-BodyMeasurementsController.delete('/:id', async (req, res) => {
+export const exclude = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idMenasurement: string = req.params.id
@@ -131,6 +130,4 @@ BodyMeasurementsController.delete('/:id', async (req, res) => {
     console.log(clc.bgRed('Erro:'), error)
     return res.status(400).json({ status: error })
   }
-})
-
-export default BodyMeasurementsController
+}

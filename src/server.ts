@@ -1,10 +1,10 @@
+import 'dotenv/config'
 import express from 'express'
 import clc from 'cli-color'
 import cors from 'cors'
 import routes from '@routes/router'
 
 const app = express()
-require('dotenv').config()
 
 // VARIABLES
 const PORT = process.env.PORT

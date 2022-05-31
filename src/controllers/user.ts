@@ -27,8 +27,7 @@ export const index = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const { name, lastName, email, password }: iUser = req.body
-    const height: number = Number(req.body.height)
+    const { name, lastName, email, password, height }: iUser = req.body
 
     // VERYFY EMAIL
     const searchEmailUser = await prisma.user.findMany({ where: { email } })
@@ -43,7 +42,13 @@ export const create = async (req: Request, res: Response) => {
 
     // REGISTER USER
     const user = await prisma.user.create({
-      data: { name, lastName, email, height, password: hashedPassword }
+      data: {
+        name: String(name),
+        lastName: String(lastName),
+        email: String(email),
+        height: Number(height),
+        password: hashedPassword
+      }
     })
 
     // RETURN

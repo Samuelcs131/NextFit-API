@@ -3,6 +3,7 @@ export interface iUser {
     lastName: string
     email: string
     password: string
+    height: number
 }
 
 export interface iBodyMeasurements {

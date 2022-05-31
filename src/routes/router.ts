@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
-import * as UserController from '@controllers/user'
-import * as TreiningController from '@controllers/treining'
+import * as userController from '@controllers/user'
+import * as treiningController from '@controllers/treining'
+import * as bodyMeasurementsController from '@controllers/bodyMeasurements'
 
 // CONTROLLERS
 const routes = express.Router()
@@ -9,15 +10,21 @@ const routes = express.Router()
 routes.get('/', (req: Request, res: Response) => res.send('Opa'))
 
 // USER
-routes.get('/user', UserController.index)
-routes.post('/user', UserController.create)
-routes.put('/user/:id', UserController.update)
-routes.delete('/user/:id', UserController.exclude)
+routes.get('/user', userController.index)
+routes.post('/user', userController.create)
+routes.put('/user/:id', userController.update)
+routes.delete('/user/:id', userController.exclude)
 
 // TREINING
-routes.get('/treining', TreiningController.index)
-routes.post('/treining', TreiningController.create)
-routes.put('/treining/:id', TreiningController.update)
-routes.delete('/treining/:id', TreiningController.exclude)
+routes.get('/treining', treiningController.index)
+routes.post('/treining/:id', treiningController.create)
+routes.patch('/treining/:id', treiningController.update)
+routes.delete('/treining/:id', treiningController.exclude)
+
+// BODY MEASUREMENTS
+routes.get('/bodyMeasurements', bodyMeasurementsController.index)
+routes.post('/bodyMeasurements/:id', bodyMeasurementsController.create)
+routes.patch('/bodyMeasurements/:id', bodyMeasurementsController.update)
+routes.delete('/bodyMeasurements/:id', bodyMeasurementsController.exclude)
 
 export default routes
