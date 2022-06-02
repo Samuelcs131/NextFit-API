@@ -4,6 +4,7 @@ import clc from 'cli-color'
 import routes from '@routes/router'
 import corsConfig from '@config/cors'
 import cors from 'cors'
+import path from 'path'
 
 const app = express()
 
@@ -12,6 +13,7 @@ const PORT = process.env.PORT
 
 // CONFIG MIDDLEWARE
 app.use(cors(corsConfig))
+app.use(express.static(path.resolve(__dirname, '..', 'public')))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

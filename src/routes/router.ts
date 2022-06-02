@@ -3,12 +3,17 @@ import * as userController from '@controllers/user'
 import * as treiningController from '@controllers/treining'
 import * as bodyMeasurementsController from '@controllers/bodyMeasurements'
 import auth from '@controllers/auth'
+import path from 'path'
 
 // CONTROLLERS
 const routes = express.Router()
 
-// ROUTES
-routes.get('/', (req: Request, res: Response) => res.send('Opa'))
+// INDEX
+routes.get('/', (req: Request, res: Response) => {
+  res.sendFile(path.resolve(__dirname, '..', '..', 'public/page/index.html'))
+})
+
+console.log()
 
 // USER
 routes.get('/users', userController.index)

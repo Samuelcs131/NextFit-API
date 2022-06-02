@@ -2,7 +2,7 @@ import clc from 'cli-color'
 import { iStatus } from 'src/@types/status'
 
 export const status200 = (messageText: string) => {
-  console.log(clc.green(messageText))
+  console.log(clc.green(`[${messageText}]`))
 }
 
 export const status500 = (error: any) => {
@@ -12,8 +12,7 @@ export const status500 = (error: any) => {
     message: 'Ocorreu um erro no servidor ao tentar processar a requisição'
   }
 
-  console.log(clc.red('Erro: ocorreu um erro no servidor'), error)
-
+  console.log(clc.red('[Erro: ocorreu um erro no servidor]'), error)
   return (status)
 }
 
@@ -24,7 +23,6 @@ export const status400 = (messageText: string) => {
     message: messageText
   }
 
-  console.log(clc.yellow(messageText))
-
+  console.log(clc.yellow(`[${messageText}]`))
   return (status)
 }

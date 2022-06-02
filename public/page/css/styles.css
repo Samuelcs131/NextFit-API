@@ -88,11 +88,15 @@ main{
     display: block;
 }
 
-.wrapper-arguments > div > span{
+.wrapper-arguments > div > .title{
     font-size: 16px;
     display: block;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
+    background-color: hsla(0,0%,100%,.8);
+    color: black;
+    font-weight: 600;
+    border-radius: 3px;
+    padding: 12px 10px;
+    margin: 5px;
 }
 
 .wrapper-arguments .response .status{
@@ -128,10 +132,12 @@ main{
 
 
 /* CHANGE COLORS */
+.wrapper-arguments .response .status.orange span i{
+    background-color: var(--orange);
+}
 .wrapper-arguments .response .status.green span i{
     background-color: var(--green);
 }
-
 .wrapper-arguments .response .status.red span i{
     background-color: var(--red);
 }
