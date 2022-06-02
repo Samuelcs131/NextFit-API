@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
-import * as userController from '@controllers/user'
-import * as treiningController from '@controllers/treining'
-import * as bodyMeasurementsController from '@controllers/bodyMeasurements'
+import * as userController from '@controllers/users'
+import * as trainingController from '@controllers/trainings'
+import * as measurementsController from '@controllers/measurements'
 import auth from '@controllers/auth'
 import path from 'path'
 
@@ -23,18 +23,18 @@ routes.put('/users/:id', userController.update)
 routes.delete('/users/:id', userController.exclude)
 
 // TREINING
-routes.get('/treinings', treiningController.index)
-routes.get('/treinings/:id', treiningController.singleTreining)
-routes.post('/treinings/:id', treiningController.create)
-routes.patch('/treinings/:id', treiningController.update)
-routes.delete('/treinings/:id', treiningController.exclude)
+routes.get('/trainings', trainingController.index)
+routes.get('/trainings/:id', trainingController.singleTreining)
+routes.post('/trainings/:id', trainingController.create)
+routes.patch('/trainings/:id', trainingController.update)
+routes.delete('/trainings/:id', trainingController.exclude)
 
-// BODY MEASUREMENTS
-routes.get('/bodyMeasurements', bodyMeasurementsController.index)
-routes.get('/bodyMeasurements/:id', bodyMeasurementsController.singleBodyMeasurements)
-routes.post('/bodyMeasurements/:id', bodyMeasurementsController.create)
-routes.patch('/bodyMeasurements/:id', bodyMeasurementsController.update)
-routes.delete('/bodyMeasurements/:id', bodyMeasurementsController.exclude)
+// MEASUREMENTS
+routes.get('/measurements', measurementsController.index)
+routes.get('/measurements/:id', measurementsController.singleMeasurements)
+routes.post('/measurements/:id', measurementsController.create)
+routes.patch('/measurements/:id', measurementsController.update)
+routes.delete('/measurements/:id', measurementsController.exclude)
 
 // AUTH
 routes.post('/auth', auth)
