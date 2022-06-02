@@ -3,17 +3,14 @@ import * as userController from '@controllers/users'
 import * as trainingController from '@controllers/trainings'
 import * as measurementsController from '@controllers/measurements'
 import auth from '@controllers/auth'
-// import path from 'path'
+import path from 'path'
 
 // CONTROLLERS
 const routes = express.Router()
 
 // INDEX
-/* routes.get('/', (req: Request, res: Response) => {
-  res.sendFile(path.resolve(__dirname, '..', '..', 'public/page/index.html'))
-}) */
 routes.get('/', (req: Request, res: Response) => {
-  res.send('Opa ta funcionando em!')
+  res.sendFile(path.resolve(__dirname, '..', '..', 'public/page/index.html'))
 })
 
 console.log()
