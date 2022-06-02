@@ -181,6 +181,16 @@ export const exclude = async (req: Request, res: Response) => {
 
     // DELETE USER
     try {
+      // DELETE TRAINING
+      await prisma.training.deleteMany({
+        where: { userId: idUser }
+      })
+
+      // DELETE MEASUREMENTS
+      await prisma.bodyMeasurements.deleteMany({
+        where: { userId: idUser }
+      })
+
       await prisma.user.delete({
         where: { id: idUser }
       })

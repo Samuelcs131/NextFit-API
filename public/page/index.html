@@ -7,10 +7,9 @@
     <title>NextFit</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css">
-    
 
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:Roboto,sans-serif}:root{--blue-transparent:rgba(97,175,254,.1);--blue:#61affe;--green-transparent:rgba(73,204,144,.1);--green:#49cc90;--orange-transparent:rgba(252,161,48,.1);--orange:#fca130;--red-transparent:rgba(249,62,62,.1);--red:#f93e3e;--black:#333333}body{overflow-x:hidden}main{margin:0 auto;margin-top:5vh;margin-bottom:100px;max-width:600px;width:100%;display:grid;gap:50px}header{margin:0 auto;margin-top:5vh;max-width:600px;width:100%}header>h1{margin:5px 10px;font-size:36px}header>p{margin:0 10px}.container-entity{margin:0 10px}.container-entity h4{font-size:26px;padding-bottom:10px;border-bottom:1px solid rgba(128,128,128,.485);margin-bottom:15px}.container-endpoints{display:flex;flex-direction:column;gap:10px}.wrapper-arguments{border:1px solid #000;border-radius:3px;overflow:hidden}.wrapper-arguments summary{display:flex;width:100%;height:38px;cursor:pointer;align-items:center;padding:5px;gap:10px;user-select:none;font-size:15px}@media screen and (max-width:480px){.wrapper-arguments summary{height:100px;flex-direction:column;justify-content:center}}.wrapper-arguments button{width:80px;height:28px;padding:6px 0;border:none;border-radius:3px;text-transform:uppercase;font-size:14px;font-weight:500;color:#fff;pointer-events:none}.wrapper-arguments div{padding:6px;width:97.5%;width:100%;display:block}.wrapper-arguments>div>.title{font-size:16px;display:block;background-color:hsla(0,0%,100%,.8);color:#000;font-weight:600;border-radius:3px;padding:12px 10px;margin:5px}.wrapper-arguments .response .status{display:flex;align-items:center;border-bottom:1px solid rgba(0,0,0,.059)}.wrapper-arguments .response .status span{display:flex;justify-content:center;align-items:center;gap:10px;font-weight:500;margin-right:10px}.wrapper-arguments .response .status span i{display:block;width:9px;height:9px;border-radius:50%}.wrapper-arguments .response .object-json{margin-top:10px;width:100%;padding:5px;border-radius:3px;font-size:14px;margin-bottom:10px}.wrapper-arguments .response .status.orange span i{background-color:var(--orange)}.wrapper-arguments .response .status.green span i{background-color:var(--green)}.wrapper-arguments .response .status.red span i{background-color:var(--red)}.wrapper-arguments.get{background-color:var(--blue-transparent);border-color:var(--blue)}.wrapper-arguments.get button{background-color:var(--blue)}.wrapper-arguments.post{background-color:var(--green-transparent);border-color:var(--green)}.wrapper-arguments.post button{background-color:var(--green)}.wrapper-arguments.delete{background-color:var(--red-transparent);border-color:var(--red)}.wrapper-arguments.delete button{background-color:var(--red)}.wrapper-arguments.put{background-color:var(--orange-transparent);border-color:var(--orange)}.wrapper-arguments.put button{background-color:var(--orange)}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Roboto,sans-serif}:root{--blue-transparent:rgba(97,175,254,.1);--blue:#61affe;--green-transparent:rgba(73,204,144,.1);--green:#49cc90;--orange-transparent:rgba(252,161,48,.1);--orange:#fca130;--red-transparent:rgba(249,62,62,.1);--red:#f93e3e;--black:#333333}body{overflow-x:hidden}main{margin:0 auto;margin-top:5vh;margin-bottom:100px;max-width:600px;width:100%;display:grid;gap:50px}header{margin:0 auto;margin-top:5vh;max-width:600px;width:100%}header>h1{margin:5px 10px;font-size:36px}header>p{margin:0 10px}.container-entity{margin:0 10px}.container-entity h4{font-size:26px;padding-bottom:10px;border-bottom:1px solid rgba(128,128,128,.485);margin-bottom:15px}.container-endpoints{display:flex;flex-direction:column;gap:10px}.wrapper-arguments{border:1px solid #000;border-radius:3px;overflow:hidden}.wrapper-arguments summary{display:flex;width:100%;height:38px;cursor:pointer;align-items:center;padding:5px;gap:10px;user-select:none;font-size:15px}@media screen and (max-width:480px){.wrapper-arguments summary{height:100px;flex-direction:column;justify-content:center}}.wrapper-arguments button{width:80px;height:28px;padding:6px 0;border:none;border-radius:3px;text-transform:uppercase;font-size:14px;font-weight:500;color:#fff;pointer-events:none}.wrapper-arguments div{padding:6px;width:97.5%;width:100%;display:block}.wrapper-arguments>div>.title{font-size:16px;display:block;background-color:hsla(0,0%,100%,.8);color:#000;font-weight:600;border-radius:3px;padding:12px 10px;margin:5px}.wrapper-arguments .response .status{display:flex;align-items:center}.wrapper-arguments .response pre{border-bottom:1px solid rgba(0,0,0,.059);padding-bottom:10px;margin-bottom:10px}.wrapper-arguments .response pre:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}.wrapper-arguments .response .status span{display:flex;justify-content:center;align-items:center;gap:10px;font-weight:500;margin-right:10px}.wrapper-arguments .response .status span i{display:block;width:9px;height:9px;border-radius:50%}.wrapper-arguments .response .object-json{margin-top:10px;width:100%;padding:5px;border-radius:3px;font-size:14px;margin-bottom:10px}.wrapper-arguments .response .status.orange span i{background-color:var(--orange)}.wrapper-arguments .response .status.green span i{background-color:var(--green)}.wrapper-arguments .response .status.red span i{background-color:var(--red)}.wrapper-arguments.get{background-color:var(--blue-transparent);border-color:var(--blue)}.wrapper-arguments.get button{background-color:var(--blue)}.wrapper-arguments.post{background-color:var(--green-transparent);border-color:var(--green)}.wrapper-arguments.post button{background-color:var(--green)}.wrapper-arguments.delete{background-color:var(--red-transparent);border-color:var(--red)}.wrapper-arguments.delete button{background-color:var(--red)}.wrapper-arguments.put{background-color:var(--orange-transparent);border-color:var(--orange)}.wrapper-arguments.put button{background-color:var(--orange)}
     </style>
 </head>
 <body>
@@ -89,11 +88,13 @@
     URL: domonio.com.br/users/12345678910
 
 </code></pre>
+</div>
+
 <span class="title">Reposta</span>
 <div class="response">
-    <div class="status green">
-        <span><i></i> 200</span>
-    </div>
+<div class="status green">
+    <span><i></i> 200</span>
+</div>
 <pre><code class="language-json object-json">
     {
         "id": "123123sda1fv43",
@@ -370,12 +371,14 @@
 <p>Pesquisar único treino por ID</p>
 </summary>
 <div>
+
 <span class="title">Parâmetros</span>
 <div class="response">
 <pre><code class="language-json object-json">
     URL: domonio.com.br/trainings/12345678910
 
 </code></pre>
+</div>
 <span class="title">Reposta</span>
 <div class="response">
     <div class="status green">
@@ -426,13 +429,15 @@
 <details class="wrapper-arguments post" >
 <summary>
     <button>POST</button>
-    <b>/trainings</b>
+    <b>/trainings /{id}</b>
     <p>Cadastrar novo treino</p>
 </summary>
 <div>
     <span class="title">Parâmetros</span>
     <div class="response">
 <pre><code class="language-json object-json">
+    URL: domonio.com.br/measurements/12345678910
+
     {
         "name": "Supino",
         "weight": 15,
@@ -686,6 +691,8 @@
     URL: domonio.com.br/measurements/12345678910
 
 </code></pre>
+</div>
+
 <span class="title">Reposta</span>
 <div class="response">
     <div class="status green">
@@ -744,13 +751,15 @@
 <details class="wrapper-arguments post" >
 <summary>
     <button>POST</button>
-    <b>/measurements</b>
+    <b>/measurements /{id}</b>
     <p>Cadastrar novo medida</p>
 </summary>
 <div>
     <span class="title">Parâmetros</span>
     <div class="response">
 <pre><code class="language-json object-json">
+    URL: domonio.com.br/measurements/12345678910
+
     {
         "date": "01-08-2021",
         "weight": 73,
@@ -924,6 +933,73 @@
     </div>
 </div>
 </details>
+
+        </div>
+</section>
+
+<!-- AUTH ------------------------------------------->
+<section class="container-entity">
+<h4>Autenticação</h4>
+<!-- CONTAINER ENDPOINTS -->
+<div class="container-endpoints">
+
+<!-- AUTH POST -->
+<details class="wrapper-arguments post" >
+<summary>
+    <button>POST</button>
+    <b>/auth</b>
+    <p>Autenticar usuário</p>
+</summary>
+<div>
+    <span class="title">Parâmetros</span>
+    <div class="response">
+<pre><code class="language-json object-json">
+    {
+        "email": "samuelcs131@gmail.com",
+        "password": "senha12345"
+    }
+
+</code></pre>
+    </div>
+    <span class="title">Reposta</span>
+    <div class="response">
+        <div class="status green">
+            <span><i></i> 200</span>
+        </div>
+<pre><code class="language-json object-json">
+    {
+        "menssage": "Usuário autenticado!",
+        "auth": true
+    }
+
+</code></pre>
+        <div class="status orange">
+            <span><i></i> 400</span>
+        </div>
+<pre><code class="language-json object-json">
+    {
+        "status": 400,
+        "code": "Requisição mal formada",
+        "message": "Preencha todos os campos!"
+    }
+
+</code></pre>
+
+        <div class="status red">
+            <span><i></i>500</span>
+        </div>
+<pre><code class="language-json object-json">
+    {
+        "status": 500,
+        "code": "Erro interno",
+        "message": "ocorreu um erro no servidor ao tentar processar a requisição"
+    }
+
+</code></pre>
+    </div>
+</div>
+</details>
+ 
 
         </div>
 </section>
