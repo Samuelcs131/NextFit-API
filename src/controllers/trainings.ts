@@ -21,7 +21,7 @@ export const index = async (req: Request, res: Response) => {
 }
 
 // GET
-export const singleTreining = async (req: Request, res: Response) => {
+export const singleTraining = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idTreining: string = String(req.params.id)
@@ -30,6 +30,34 @@ export const singleTreining = async (req: Request, res: Response) => {
       // SEARCH USERS
       const training = await prisma.training.findUnique({
         where: { id: idTreining }
+      })
+
+      // RETURN
+      status200('Pesquisa realizada!')
+      res.status(200).send(training)
+
+      // ERROR!
+    } catch (error) {
+      console.log(error)
+      return res.status(400).send(status400('O ID fornecido é invalido!'))
+    }
+
+    // ERROR!
+  } catch (error) {
+    return res.status(400).send(status500(error))
+  }
+}
+
+// GET
+export const userTrainings = async (req: Request, res: Response) => {
+  try {
+    // PARAMS
+    const idUser: string = String(req.params.id)
+
+    try {
+      // SEARCH USERS
+      const training = await prisma.training.findMany({
+        where: { userId: idUser }
       })
 
       // RETURN

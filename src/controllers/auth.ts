@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { PrismaClient, User } from '@prisma/client'
 import { compare } from 'bcrypt'
 import { status200, status400, status500 } from './response/status'
+import generateToken from './token/generateToken'
 
 const prisma = new PrismaClient()
 
@@ -38,7 +39,14 @@ const auth = async (req: Request, res: Response) => {
     if (comparePassword === true) {
       // RETURN
       status200('Usuário autenticado!')
-      res.status(200).send({ menssage: 'Usuário autenticado!', auth: true })
+      res.status(200).send({
+        id: userData.id,
+        name: userData.name,
+        lastName: userData.lastName,
+        email: userData.email,
+        height: userData.height,
+        token: await generateToken(userData.id)
+      })
     } else {
       // RETURN
       status400('Senha não autenticado!')

@@ -425,6 +425,70 @@
 </div>
 </details>
 
+<!-- TREINING USER GET -->
+<details class="wrapper-arguments get" >
+<summary>
+<button>Get</button>
+<b>/trainings /user /{id}</b>
+<p>Pesquisar treinos de um usuário por ID</p>
+</summary>
+<div>
+
+<span class="title">Parâmetros</span>
+<div class="response">
+<pre><code class="language-json object-json">
+    URL: domonio.com.br/trainings/user/12345678910
+
+</code></pre>
+</div>
+<span class="title">Reposta</span>
+<div class="response">
+    <div class="status green">
+        <span><i></i> 200</span>
+    </div>
+<pre><code class="language-json object-json">
+    [
+        {
+            "id": "6298346d10fe43d1d3030a67",
+            "userId": "62971af6c58f95a604ad7f62",
+            "data": "2021-09-01T00:00:00.000Z",
+            "name": "Supino",
+            "series": 4,
+            "repetitions": [15, 15, 15, 15],
+            "weight": 15,
+            "interval": 120,
+            "createAt": "2022-06-02T00:00:00.000Z"
+        }
+    ]
+
+</code></pre>
+    <div class="status orange">
+        <span><i></i> 400</span>
+    </div>
+<pre><code class="language-json object-json">
+    {
+        "status": 400,
+        "code": "Requisição mal formada",
+        "message": "O ID fornecido é invalido!"
+    }
+
+</code></pre>
+
+    <div class="status red">
+        <span><i></i>500</span>
+    </div>
+<pre><code class="language-json object-json">
+    {
+        "status": 500,
+        "code": "Erro interno",
+        "message": "ocorreu um erro no servidor ao tentar processar a requisição"
+    }
+
+</code></pre>
+</div>
+</div>
+</details>
+
 <!-- TREINING POST -->
 <details class="wrapper-arguments post" >
 <summary>
@@ -683,6 +747,76 @@
 <button>Get</button>
 <b>/measurements /{id}</b>
 <p>Pesquisar único medida por ID</p>
+</summary>
+<div>
+<span class="title">Parâmetros</span>
+<div class="response">
+<pre><code class="language-json object-json">
+    URL: domonio.com.br/measurements/12345678910
+
+</code></pre>
+</div>
+
+<span class="title">Reposta</span>
+<div class="response">
+    <div class="status green">
+        <span><i></i> 200</span>
+    </div>
+<pre><code class="language-json object-json">
+    {
+        "id": "62981f4510fe43d1d3030a65",
+        "userId": "62971af6c58f95a604ad7f62",
+        "date": "2021-08-01T00:00:00.000Z",
+        "weight": 73,
+        "rightArm": 40,
+        "leftArm": 40,
+        "rightThigh": 60,
+        "leftThigh": 60,
+        "rightForearm": 30,
+        "leftForearm": 30,
+        "breastplate": 95,
+        "abdomen": 85,
+        "gluteal": 100,
+        "rightCalf": 40,
+        "leftCalf": 40,
+        "deltoid": 120,
+        "createAt": "2022-06-01T00:00:00.000Z"
+    }
+
+</code></pre>
+    <div class="status orange">
+        <span><i></i> 400</span>
+    </div>
+<pre><code class="language-json object-json">
+    {
+        "status": 400,
+        "code": "Requisição mal formada",
+        "message": "O ID fornecido é invalido!"
+    }
+
+</code></pre>
+
+    <div class="status red">
+        <span><i></i>500</span>
+    </div>
+<pre><code class="language-json object-json">
+    {
+        "status": 500,
+        "code": "Erro interno",
+        "message": "ocorreu um erro no servidor ao tentar processar a requisição"
+    }
+
+</code></pre>
+</div>
+</div>
+</details>
+
+<!-- MEASUREMENTS USER GET -->
+<details class="wrapper-arguments get" >
+<summary>
+<button>Get</button>
+<b>/measurements /user /{id}</b>
+<p>Pesquisar medida de um usuário por ID</p>
 </summary>
 <div>
 <span class="title">Parâmetros</span>

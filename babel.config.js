@@ -12,9 +12,11 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
-        '@routes': './src/routes',
-        '@controllers': './src/controllers',
-        '@config': './src/config'
+        '@pages': './src/pages',
+        '@components': './src/components',
+        '@styles': './src/styles',
+        '@store': './src/store',
+        '@theme': './src/theme'
       }
     }]
   ],

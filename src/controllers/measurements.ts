@@ -42,6 +42,27 @@ export const singleMeasurements = async (req: Request, res: Response) => {
   }
 }
 
+// GET
+export const userMeasurements = async (req: Request, res: Response) => {
+  try {
+    // PARAMS
+    const idUser: string = req.params.id
+
+    // SEARCH USERS
+    const measurements = await prisma.bodyMeasurements.findMany({
+      where: { userId: idUser }
+    })
+
+    // RETURN
+    status200('Pesquisa realizada!')
+    res.status(200).send(measurements)
+
+    // ERROR!
+  } catch (error) {
+    res.status(500).send(status500(error))
+  }
+}
+
 // POST
 export const create = async (req: Request, res: Response) => {
   try {

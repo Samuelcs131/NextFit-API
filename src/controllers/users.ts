@@ -3,6 +3,7 @@ import { PrismaClient, User } from '@prisma/client'
 import { iUser } from 'src/@types/endpoints'
 import { hash } from 'bcrypt'
 import { status200, status400, status500 } from './response/status'
+import generateToken from './token/generateToken'
 
 const prisma = new PrismaClient()
 
@@ -111,7 +112,7 @@ export const create = async (req: Request, res: Response) => {
     const hashedPassword: string = await hash(password, 10)
 
     // REGISTER USER
-    await prisma.user.create({
+    const userData = await prisma.user.create({
       data: {
         name: String(name).trim(),
         lastName: String(lastName).trim(),
@@ -123,7 +124,14 @@ export const create = async (req: Request, res: Response) => {
 
     // RETURN
     status200('Usuário Cadastrado!')
-    return res.status(204).send('Usuário Cadastrado!')
+    return res.status(200).send({
+      id: userData.id,
+      name: userData.name,
+      lastName: userData.lastName,
+      email: userData.email,
+      height: userData.height,
+      token: await generateToken(userData.id)
+    })
 
   // ERROR!
   } catch (error) {
