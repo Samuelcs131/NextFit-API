@@ -1,3 +1,4 @@
+
 module.exports = {
   presets: [
     [
@@ -12,11 +13,9 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
-        '@pages': './src/pages',
-        '@components': './src/components',
-        '@styles': './src/styles',
-        '@store': './src/store',
-        '@theme': './src/theme'
+        '@routes': './src/routes',
+        '@controllers': './src/controllers',
+        '@config': './src/config'
       }
     }]
   ],

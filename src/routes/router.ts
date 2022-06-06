@@ -4,7 +4,7 @@ import * as trainingController from '@controllers/trainings'
 import * as measurementsController from '@controllers/measurements'
 import auth from '@controllers/auth'
 import path from 'path'
-import { authMiddleware } from 'src/middleware/auth'
+import { authMiddleware } from '@controllers/middleware/auth'
 
 // CONTROLLERS
 const routes = express.Router()
