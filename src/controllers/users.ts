@@ -65,7 +65,8 @@ export const singleUser = async (req: Request, res: Response) => {
         lastName: user?.lastName,
         email: user?.email,
         height: user?.height,
-        passwordResetExpires: user?.passwordResetExpires
+        passwordResetExpires: user?.passwordResetExpires,
+        passwordResetToken: user?.passwordResetToken
       })
     } catch (error) {
       console.log(error)
@@ -196,7 +197,17 @@ export const update = async (req: Request, res: Response) => {
 // PUT
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
-    const email : string = req.body.email
+    // PARAMS
+    const email : string = req.body.email.trim()
+    const dateNowBrasilian = new Date().toLocaleString('pt-BR')
+    const dateNow = new Date(dateNowBrasilian)
+    dateNow.setMinutes(dateNow.getMinutes() + 15)
+
+    // VERIFY INPUTS
+    // eslint-disable-next-line
+    if (email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) === null) {
+      return res.status(400).send(status400('Email invalido!'))
+    }
 
     const user = await prisma.user.findUnique({ where: { email } })
 
@@ -204,10 +215,11 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(400).send(status400('Usuário não encontrado!'))
     }
 
-    const token = randomBytes(8).toString('hex')
+    /* if (!user.passwordResetExpires) {
+      return res.status(400).send(status400('Usuário não encontrado!'))
+    } */
 
-    const dateNow = new Date()
-    dateNow.setHours(dateNow.getHours() + 1)
+    const token = randomBytes(20).toString('hex')
 
     // SEND EMAIL
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
