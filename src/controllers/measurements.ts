@@ -47,6 +47,12 @@ export const userMeasurements = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idUser: string = req.params.id
+    const idUserAuth: string = req.body.idUserAuth
+
+    // VERIFY AUTH
+    if (idUserAuth !== idUser) {
+      return res.status(401).send(status400('Usuário não autorizado!'))
+    }
 
     // SEARCH USERS
     const measurements = await prisma.bodyMeasurements.findMany({
@@ -69,7 +75,13 @@ export const create = async (req: Request, res: Response) => {
     // PARAMS
     const idUser: string = req.params.id
     const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight }: iBodyMeasurements = req.body
+    const idUserAuth: string = req.body.idUserAuth
     const inputs = [abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight]
+
+    // VERIFY AUTH
+    if (idUserAuth !== idUser) {
+      return res.status(401).send(status400('Usuário não autorizado!'))
+    }
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -126,9 +138,15 @@ export const update = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idMenasurement: string = req.params.id
-    const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight }: iBodyMeasurements = req.body
-    const inputs = [abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight]
+    const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight, idUser }: iBodyMeasurements = req.body
     const date: string = req.body.date.split('-').reverse().join('-')
+    const idUserAuth = req.body.idUserAuth
+    const inputs = [abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight]
+
+    // VERIFY AUTH
+    if (idUserAuth !== idUser) {
+      return res.status(401).send(status400('Usuário não autorizado!'))
+    }
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -177,6 +195,13 @@ export const exclude = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idMeasurements: string = req.params.id
+    const idUserAuth: string = req.body.idUserAuth
+    const idUser: string = req.body.idUser
+
+    // VERIFY AUTH
+    if (idUserAuth !== idUser) {
+      return res.status(401).send(status400('Usuário não autorizado!'))
+    }
 
     // REGISTER MEASUREMENTS
     await prisma.bodyMeasurements.delete({

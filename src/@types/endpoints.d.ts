@@ -20,6 +20,7 @@ export interface iBodyMeasurements {
     rightForearm: number
     rightThigh: number
     weight: number
+    idUser: string
 }
 
 export interface iTreining {

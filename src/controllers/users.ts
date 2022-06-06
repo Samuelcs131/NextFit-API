@@ -4,6 +4,8 @@ import { iUser } from 'src/@types/endpoints'
 import { hash } from 'bcrypt'
 import { status200, status400, status500 } from './response/status'
 import generateToken from './token/generateToken'
+import { randomBytes } from 'crypto'
+import sgMail from '@sendgrid/mail'
 
 const prisma = new PrismaClient()
 
@@ -147,6 +149,12 @@ export const update = async (req: Request, res: Response) => {
     const { name, lastName, email } = req.body
     const Height: number = Number(req.body.height)
     const inputs = [idUser, name, lastName, email, Height]
+    const idUserAuth: string = req.body.idUserAuth
+
+    // VERIFY AUTH
+    if (idUserAuth !== idUser) {
+      return res.status(401).send(status400('Usuário não autorizado!'))
+    }
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -181,11 +189,60 @@ export const update = async (req: Request, res: Response) => {
   }
 }
 
+// PUT
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const email : string = req.body.email
+
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    if (!user) {
+      return res.status(400).send(status400('Usuário não encontrado!'))
+    }
+
+    const newPassword = randomBytes(8).toString('hex')
+
+    // SEND EMAIL
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
+
+    sgMail.send({
+      from: 'samuelcs131@gmail.com',
+      to: email,
+      subject: 'Recuperação de senha',
+      text: `Sua nova senha é: ${newPassword}`
+
+    }).then(
+      async () => {
+        const password = await hash(newPassword, 10)
+
+        await prisma.user.update({ where: { email }, data: { password } })
+
+        return res.status(204).send(status200('Senha enviada ao email!'))
+      }
+    // ERROR
+    ).catch(
+      async (error: any) => {
+        console.log(error)
+        return res.status(500).send(status500('Não foi possivel enviar email!'))
+      }
+    )
+  // ERROR
+  } catch (error) {
+    res.status(500).send(status500(error))
+  }
+}
+
 // DELETE
 export const exclude = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idUser: string = String(req.params.id)
+    const idUserAuth: string = req.body.idUserAuth
+
+    // VERIFY AUTH
+    if (idUserAuth !== idUser) {
+      return res.status(401).send(status400('Usuário não autorizado!'))
+    }
 
     // DELETE USER
     try {
