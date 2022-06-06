@@ -1,7 +1,7 @@
 import { CorsOptions } from 'cors'
 
 const corsConfig: CorsOptions = {
-  origin: ['https://nextfit-api.herokuapp.com'],
+  origin: ['https://nextfitt.vercel.app'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204

@@ -39,17 +39,18 @@ export const index = async (req: Request, res: Response) => {
 export const singleUser = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const idUser: string = String(req.params.id.trim())
+    const email: string = String(req.params.email.trim())
 
     // VERIFY INPUT
-    if (idUser === undefined || idUser === null || idUser === '') {
-      return res.status(400).send(status400('O ID fornecido é invalido!'))
+    // eslint-disable-next-line
+    if (email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) === null) {
+      return res.status(400).send(status400('Email invalido!'))
     }
 
     // SEARCH USER
     try {
       const user: User | null = await prisma.user.findUnique({
-        where: { id: idUser }
+        where: { email }
       })
 
       if (user === undefined || user === null) {
@@ -63,7 +64,8 @@ export const singleUser = async (req: Request, res: Response) => {
         name: user?.name,
         lastName: user?.lastName,
         email: user?.email,
-        height: user?.height
+        height: user?.height,
+        passwordResetExpires: user?.passwordResetExpires
       })
     } catch (error) {
       console.log(error)
@@ -120,7 +122,9 @@ export const create = async (req: Request, res: Response) => {
         lastName: String(lastName).trim(),
         email: String(email).trim(),
         height: Number(height),
-        password: hashedPassword
+        password: hashedPassword,
+        passwordResetExpires: new Date('2000-01-01'),
+        passwordResetToken: 'initial'
       }
     })
 
@@ -200,7 +204,10 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(400).send(status400('Usuário não encontrado!'))
     }
 
-    const newPassword = randomBytes(8).toString('hex')
+    const token = randomBytes(8).toString('hex')
+
+    const dateNow = new Date()
+    dateNow.setHours(dateNow.getHours() + 1)
 
     // SEND EMAIL
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
@@ -208,16 +215,25 @@ export const forgotPassword = async (req: Request, res: Response) => {
     sgMail.send({
       from: 'samuelcs131@gmail.com',
       to: email,
-      subject: 'Recuperação de senha',
-      text: `Sua nova senha é: ${newPassword}`
+      subject: 'Recupere sua senha | NextFit',
+      html: ` <h1>Roi gata kk</h1>
+              <p>Esqueceu a senha né vacilona?!</p>
+              <p>Não tem problema, é muito fácil criar uma nova é só arrastar pra cima! brinks kk aperta no link pô! não é virus relaxa<p>
+              <a href="https://nextfitt.vercel.app/password/${email}/${token}">CLIQUE AQUI PARA RECUPERAR SUA SENHA</a>
+              <p>Se você não solicitou a recuperação de senha, ignore este e-mail. Algum salafrario ta tentando ter acesso a sua conta mas relaxa que o site do pai é seguro! #confia</p>
+      `
 
     }).then(
       async () => {
-        const password = await hash(newPassword, 10)
+        await prisma.user.update({
+          where: { email },
+          data: {
+            passwordResetToken: token,
+            passwordResetExpires: dateNow
+          }
+        })
 
-        await prisma.user.update({ where: { email }, data: { password } })
-
-        return res.status(204).send(status200('Senha enviada ao email!'))
+        return res.status(204).send(status200('Link de alteração de senha enviado ao email!'))
       }
     // ERROR
     ).catch(

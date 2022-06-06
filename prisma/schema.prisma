@@ -17,6 +17,8 @@ model User {
   email String @unique
   height Float
   password String
+  passwordResetToken String
+  passwordResetExpires DateTime
   bodyMeasurement BodyMeasurements[]
   training Training[]
 }

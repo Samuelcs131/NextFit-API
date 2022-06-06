@@ -16,11 +16,12 @@ routes.get('/', (req: Request, res: Response) => {
 
 // USER
 routes.get('/users', userController.index)
-routes.get('/users/:id', userController.singleUser)
+routes.get('/users/:email', userController.singleUser)
 routes.post('/users', userController.create)
 routes.put('/users/:id', authMiddleware, userController.update)
-routes.post('/forgot', userController.forgotPassword)
 routes.delete('/users/:id', authMiddleware, userController.exclude)
+routes.post('/users/forgot_password', userController.forgotPassword)
+routes.post('/users/reset_password', userController.forgotPassword)
 
 // TREINING
 routes.get('/trainings', trainingController.index)
