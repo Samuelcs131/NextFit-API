@@ -274,12 +274,12 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const passwordResetToken: string = req.body.passwordResetToken
-    const password: string = req.body
-    const email : string = req.body.email.trim()
+    const passwordResetToken: string = req.body.resetToken || req.body.body.resetToken
+    const password: string = req.body.password || req.body.body.password
+    const email: string = req.body.email || req.body.body.email
 
     // VERIFY USER
-    const userData: User | null = await prisma.user.findUnique({ where: { email } })
+    const userData: User | null = await prisma.user.findFirst({ where: { email } })
 
     if (!userData) {
       return res.status(400).send(status400('Usuário não existe!'))
