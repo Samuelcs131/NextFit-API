@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { status200, status400, status500 } from './response/status'
+import dateNow from '@resources/dateNow'
+import { iTreining } from 'src/@types/endpoints'
 
 const prisma = new PrismaClient()
 
@@ -80,11 +82,11 @@ export const userTrainings = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const { name, weight, series, interval } = req.body
+    const { name, weight, series, interval }: iTreining = req.body
     const userId: string = req.params.id
-    const Repetitions: Array<string> = req.body.repetitions
+    const repetitions: Array<string> = req.body.repetitions
     const date: string = req.body.date.split('-').reverse().join('-')
-    const inputs = [name, weight, series, date, Repetitions, interval]
+    const inputs = [name, weight, series, date, repetitions, interval]
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -93,34 +95,31 @@ export const create = async (req: Request, res: Response) => {
       }
     }
 
-    if (Array.isArray(Repetitions) === false) {
+    if (Array.isArray(repetitions) === false) {
       return res.status(400).send(status400('O campo repetições só pode ser definido como vetor!'))
     }
 
-    for (let num = 0; num < Repetitions.length; num++) {
-      if (typeof Repetitions[num] !== 'number') {
+    for (let num = 0; num < repetitions.length; num++) {
+      if (typeof repetitions[num] !== 'number') {
         return res.status(400).send(status400('Só seram aceitas repetições em formato de númerico!'))
       }
     }
 
-    if (Repetitions.length !== series) {
+    if (repetitions.length !== series) {
       return res.status(400).send(status400('O número de repetições não corresponde ao de serie!'))
     }
-
-    // DATE NOW
-    const dateNow: string = Intl.DateTimeFormat('pt-BR', { dateStyle: 'short' }).format().split('/').reverse().join('-')
 
     // REGISTER TREINING
     await prisma.training.create({
       data: {
-        name: String(name.trim()),
+        name: name.trim(),
         userId: String(userId),
-        weight: Number(weight),
-        repetitions: Repetitions,
-        series: Number(series),
+        weight,
+        repetitions,
+        series,
         data: new Date(date),
-        interval: Number(interval),
-        createAt: new Date(dateNow)
+        interval,
+        createAt: dateNow
       }
     })
 
@@ -138,11 +137,11 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const { name, weight, series, interval } = req.body
+    const { name, weight, series, interval }: iTreining = req.body
     const trainingId: string = req.params.id
-    const Repetitions: Array<number> = req.body.repetitions
+    const repetitions: Array<number> = req.body.repetitions
     const date: string = req.body.date.split('-').reverse().join('-')
-    const inputs = [name, weight, series, trainingId, Repetitions, date]
+    const inputs = [name, weight, series, trainingId, repetitions, date]
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -151,17 +150,17 @@ export const update = async (req: Request, res: Response) => {
       }
     }
 
-    if (Array.isArray(Repetitions) === false) {
+    if (Array.isArray(repetitions) === false) {
       return res.status(400).send(status400('O campo repetições só pode ser definido como vetor!'))
     }
 
-    for (let num = 0; num < Repetitions.length; num++) {
-      if (typeof Repetitions[num] !== 'number') {
+    for (let num = 0; num < repetitions.length; num++) {
+      if (typeof repetitions[num] !== 'number') {
         return res.status(400).send(status400('Só seram aceitas repetições em formato de númerico!'))
       }
     }
 
-    if (Repetitions.length !== series) {
+    if (repetitions.length !== series) {
       return res.status(400).send(status400('O número de repetições não corresponde ao de serie!'))
     }
 
@@ -170,11 +169,11 @@ export const update = async (req: Request, res: Response) => {
       await prisma.training.update({
         where: { id: trainingId },
         data: {
-          name: String(name.trim()),
-          weight: Number(weight),
-          repetitions: Repetitions,
-          series: Number(series),
-          interval: Number(interval),
+          name: name.trim(),
+          weight,
+          repetitions,
+          series,
+          interval,
           data: new Date(date)
         }
       })

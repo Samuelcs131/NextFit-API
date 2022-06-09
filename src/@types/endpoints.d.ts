@@ -26,6 +26,6 @@ export interface iBodyMeasurements {
 export interface iTreining {
     name: string
     weight: number
-    repetitions: JSON
     series: number
+    interval: number
 }

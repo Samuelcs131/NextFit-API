@@ -3,9 +3,10 @@ import { PrismaClient, User } from '@prisma/client'
 import { iUser } from 'src/@types/endpoints'
 import { hash } from 'bcrypt'
 import { status200, status400, status500 } from './response/status'
-import generateToken from './token/generateToken'
+import { generateTokenUser, varifyApiKey } from './token/generateToken'
 import { randomBytes } from 'crypto'
 import sgMail from '@sendgrid/mail'
+import dateNow from '@resources/dateNow'
 
 const prisma = new PrismaClient()
 
@@ -40,6 +41,14 @@ export const singleUser = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const email: string = String(req.params.email.trim())
+    const tokenAuthClientServer: string = req.headers.authclientserver as string
+
+    // VERIFY AUTH
+    const token: boolean = await varifyApiKey(tokenAuthClientServer)
+
+    if (!token) {
+      return res.status(401).send(status400('Token invalido, acesso negado!'))
+    }
 
     // VERIFY INPUT
     // eslint-disable-next-line
@@ -137,7 +146,7 @@ export const create = async (req: Request, res: Response) => {
       lastName: userData.lastName,
       email: userData.email,
       height: userData.height,
-      token: await generateToken(userData.id)
+      token: await generateTokenUser(userData.id)
     })
 
   // ERROR!
@@ -199,9 +208,6 @@ export const forgotPassword = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const email : string = req.body.email.trim()
-    const dateNowBrasilian = new Date().toLocaleString('pt-BR')
-    const dateNow = new Date(dateNowBrasilian)
-    dateNow.setMinutes(dateNow.getMinutes() + 15)
 
     // VERIFY INPUTS
     // eslint-disable-next-line
@@ -215,10 +221,14 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(400).send(status400('Usuário não encontrado!'))
     }
 
-    /* if (!user.passwordResetExpires) {
-      return res.status(400).send(status400('Usuário não encontrado!'))
-    } */
+    if (dateNow < user.passwordResetExpires) {
+      return res.status(400).send(status400('Email já foi enviado aguarde um tempo para solicitar novamente!'))
+    }
 
+    // DATE
+    dateNow.setHours(dateNow.getHours() + 2)
+
+    // TOKEN RESET PASSWORD
     const token = randomBytes(20).toString('hex')
 
     // SEND EMAIL
@@ -229,8 +239,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
       to: email,
       subject: 'Recupere sua senha | NextFit',
       html: ` <h1>Roi gata kk</h1>
-              <p>Esqueceu a senha né vacilona?!</p>
-              <p>Não tem problema, é muito fácil criar uma nova é só arrastar pra cima! brinks kk aperta no link pô! não é virus relaxa<p>
+      <p>Esqueceu a senha né vacilona?!</p>
+      <p>Não tem problema, é muito fácil criar uma nova é só arrastar pra cima! brinks kk aperta no link pô! não é virus relaxa<p>
               <a href="https://nextfitt.vercel.app/password/${email}/${token}">CLIQUE AQUI PARA RECUPERAR SUA SENHA</a>
               <p>Se você não solicitou a recuperação de senha, ignore este e-mail. Algum salafrario ta tentando ter acesso a sua conta mas relaxa que o site do pai é seguro! #confia</p>
       `
@@ -254,6 +264,55 @@ export const forgotPassword = async (req: Request, res: Response) => {
         return res.status(500).send(status500('Não foi possivel enviar email!'))
       }
     )
+  // ERROR
+  } catch (error) {
+    res.status(500).send(status500(error))
+  }
+}
+
+// PUT
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    // PARAMS
+    const passwordResetToken: string = req.body.passwordResetToken
+    const password: string = req.body
+    const email : string = req.body.email.trim()
+
+    // VERIFY USER
+    const userData: User | null = await prisma.user.findUnique({ where: { email } })
+
+    if (!userData) {
+      return res.status(400).send(status400('Usuário não existe!'))
+    }
+
+    if (passwordResetToken !== userData?.passwordResetToken) {
+      return res.status(400).send(status400('Token de senha invalido!'))
+    }
+
+    if (dateNow > userData.passwordResetExpires) {
+      return res.status(400).send(status400('Token expirou, solicite novamente!'))
+    }
+
+    // UPADTE PASSWORD
+    await prisma.user.update({
+      where: { email },
+      data: {
+        password
+      }
+
+    // RETURN
+    }).then(
+      () => {
+        return res.status(204).send(status200('Senha atualizada com sucesso!'))
+      }
+
+    // ERROR
+    ).catch(
+      (error) => {
+        return res.status(500).send(status500(error))
+      }
+    )
+
   // ERROR
   } catch (error) {
     res.status(500).send(status500(error))

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { PrismaClient, User } from '@prisma/client'
 import { compare } from 'bcrypt'
 import { status200, status400, status500 } from './response/status'
-import generateToken from './token/generateToken'
+import { generateTokenUser } from './token/generateToken'
 
 const prisma = new PrismaClient()
 
@@ -45,7 +45,7 @@ const auth = async (req: Request, res: Response) => {
         lastName: userData.lastName,
         email: userData.email,
         height: userData.height,
-        token: await generateToken(userData.id)
+        token: await generateTokenUser(userData.id)
       })
     } else {
       // RETURN

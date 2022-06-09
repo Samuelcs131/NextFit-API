@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { iBodyMeasurements } from 'src/@types/endpoints'
 import { status200, status400, status500 } from './response/status'
+import dateNow from '@resources/dateNow'
 
 const prisma = new PrismaClient()
 
@@ -77,6 +78,7 @@ export const create = async (req: Request, res: Response) => {
     const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight }: iBodyMeasurements = req.body
     const idUserAuth: string = req.body.idUserAuth
     const inputs = [abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight]
+    const date: string = req.body.date.split('-').reverse().join('-')
 
     // VERIFY AUTH
     if (idUserAuth !== idUser) {
@@ -94,31 +96,24 @@ export const create = async (req: Request, res: Response) => {
       }
     }
 
-    // DATE NOW
-    const dateNow: string = Intl.DateTimeFormat('pt-BR', {
-      dateStyle: 'short'
-    }).format().split('/').reverse().join('-')
-
-    const date: string = req.body.date.split('-').reverse().join('-')
-
     // REGISTER MEASUREMENTS
     await prisma.bodyMeasurements.create({
       data: {
         date: new Date(date),
-        abdomen: Number(abdomen),
-        breastplate: Number(breastplate),
-        deltoid: Number(deltoid),
-        gluteal: Number(gluteal),
-        leftArm: Number(leftArm),
-        leftCalf: Number(leftCalf),
-        leftForearm: Number(leftForearm),
-        leftThigh: Number(leftThigh),
-        rightArm: Number(rightArm),
-        rightCalf: Number(rightCalf),
-        rightForearm: Number(rightForearm),
-        rightThigh: Number(rightThigh),
-        weight: Number(weight),
-        createAt: new Date(dateNow),
+        abdomen,
+        breastplate,
+        deltoid,
+        gluteal,
+        leftArm,
+        leftCalf,
+        leftForearm,
+        leftThigh,
+        rightArm,
+        rightCalf,
+        rightForearm,
+        rightThigh,
+        weight,
+        createAt: dateNow,
         userId: idUser
       }
     })
@@ -164,19 +159,19 @@ export const update = async (req: Request, res: Response) => {
       where: { id: idMenasurement },
       data: {
         date: new Date(date),
-        abdomen: Number(abdomen),
-        breastplate: Number(breastplate),
-        deltoid: Number(deltoid),
-        gluteal: Number(gluteal),
-        leftArm: Number(leftArm),
-        leftCalf: Number(leftCalf),
-        leftForearm: Number(leftForearm),
-        leftThigh: Number(leftThigh),
-        rightArm: Number(rightArm),
-        rightCalf: Number(rightCalf),
-        rightForearm: Number(rightForearm),
-        rightThigh: Number(rightThigh),
-        weight: Number(weight)
+        abdomen,
+        breastplate,
+        deltoid,
+        gluteal,
+        leftArm,
+        leftCalf,
+        leftForearm,
+        leftThigh,
+        rightArm,
+        rightCalf,
+        rightForearm,
+        rightThigh,
+        weight
       }
     })
 
