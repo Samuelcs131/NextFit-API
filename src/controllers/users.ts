@@ -278,6 +278,10 @@ export const resetPassword = async (req: Request, res: Response) => {
     const password: string = req.body.password || req.body.body.password
     const email: string = req.body.email || req.body.body.email
 
+    if (password.length < 6 || password.length > 16) {
+      return res.status(400).send(status400('A senha deve contar mais de 6 caracteres e no máximo 16!'))
+    }
+
     // VERIFY USER
     const userData: User | null = await prisma.user.findFirst({ where: { email } })
 
@@ -293,11 +297,15 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(400).send(status400('Token expirou, solicite novamente!'))
     }
 
+    // TOKEN RESET PASSWORD
+    const token: string = randomBytes(20).toString('hex')
+
     // UPADTE PASSWORD
     await prisma.user.update({
       where: { email },
       data: {
-        password
+        password,
+        passwordResetToken: token
       }
 
     // RETURN
