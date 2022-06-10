@@ -10,8 +10,8 @@ const prisma = new PrismaClient()
 const auth = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const email: string = req.body.email
-    const password: string = req.body.password
+    const email: string = req.body.email || req.body.body.email
+    const password: string = req.body.password || req.body.body.password
     const inputs = [email, password]
 
     // VERIFY INPUTS
@@ -39,14 +39,17 @@ const auth = async (req: Request, res: Response) => {
     if (comparePassword === true) {
       // RETURN
       status200('Usuário autenticado!')
-      res.status(200).send({
-        id: userData.id,
-        name: userData.name,
-        lastName: userData.lastName,
-        email: userData.email,
-        height: userData.height,
-        token: await generateTokenUser(userData.id)
-      })
+      res.status(200).send(
+        {
+          user: {
+            id: userData.id,
+            name: userData.name,
+            lastName: userData.lastName,
+            email: userData.email,
+            height: userData.height
+          },
+          token: await generateTokenUser(userData.id)
+        })
     } else {
       // RETURN
       status400('Senha não autenticado!')

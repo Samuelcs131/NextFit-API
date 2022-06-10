@@ -4,7 +4,7 @@ import secret from '@config/secret'
 import { verify } from 'jsonwebtoken'
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  const authorization: string = req.headers.authorization as string
+  const authorization: string = (req.headers.authorization || req.body.headers.authorization) as string
 
   if (!authorization) {
     return res.status(401).send(status400('O token não foi informado!'))

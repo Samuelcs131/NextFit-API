@@ -41,14 +41,14 @@ export const singleUser = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const email: string = String(req.params.email.trim())
-    const tokenAuthClientServer: string = req.headers.authclientserver as string
+    /* const tokenAuthClientServer: string = req.headers.authclientserver as string
 
     // VERIFY AUTH
     const token: boolean = await varifyApiKey(tokenAuthClientServer)
 
     if (!token) {
       return res.status(401).send(status400('Token invalido, acesso negado!'))
-    }
+    } */
 
     // VERIFY INPUT
     // eslint-disable-next-line
@@ -76,6 +76,38 @@ export const singleUser = async (req: Request, res: Response) => {
         height: user?.height,
         passwordResetExpires: user?.passwordResetExpires,
         passwordResetToken: user?.passwordResetToken
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(400).send(status400('O ID fornecido é invalido!'))
+    }
+
+    // ERROR!
+  } catch (error) {
+    res.status(500).send(status500(error))
+  }
+}
+
+// GET
+export const getUserByToken = async (req: Request, res: Response) => {
+  try {
+    // PARAMS
+    const tokenAuthUser: string = req.body.idUserAuth
+
+    // SEARCH USER
+    try {
+      const user: User | null = await prisma.user.findUnique({
+        where: { id: tokenAuthUser }
+      })
+
+      // RETURN
+      status200('Pesquisa realizada!')
+      res.status(200).send({
+        id: user?.id,
+        name: user?.name,
+        lastName: user?.lastName,
+        email: user?.email,
+        height: user?.height
       })
     } catch (error) {
       console.log(error)
@@ -300,11 +332,14 @@ export const resetPassword = async (req: Request, res: Response) => {
     // TOKEN RESET PASSWORD
     const token: string = randomBytes(20).toString('hex')
 
+    // HASH PASSWORD
+    const hashedPassword: string = await hash(password, 10)
+
     // UPADTE PASSWORD
     await prisma.user.update({
       where: { email },
       data: {
-        password,
+        password: hashedPassword,
         passwordResetToken: token
       }
 

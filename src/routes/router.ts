@@ -16,7 +16,8 @@ routes.get('/', (req: Request, res: Response) => {
 
 // USER
 routes.get('/users', userController.index)
-routes.get('/users/:email', userController.singleUser)
+routes.get('/users/email/:email', userController.singleUser)
+routes.get('/users/token', authMiddleware, userController.getUserByToken)
 routes.post('/users', userController.create)
 routes.put('/users/:id', authMiddleware, userController.update)
 routes.delete('/users/:id', authMiddleware, userController.exclude)
