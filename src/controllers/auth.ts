@@ -31,7 +31,7 @@ const auth = async (req: Request, res: Response) => {
     })
 
     if (userData === null || userData === undefined) {
-      return res.status(400).send(status400('Email não encontrado!'))
+      return res.status(400).send(status400('Usuário ou senha incorretos!'))
     }
 
     // COMPARE
@@ -53,7 +53,7 @@ const auth = async (req: Request, res: Response) => {
     } else {
       // RETURN
       status400('Senha não autenticado!')
-      res.status(200).send({ menssage: 'Usuário não autenticado!', auth: false })
+      res.status(400).send(status400('Usuário ou senha incorretos!'))
     }
 
     // ERROR!
