@@ -124,22 +124,28 @@ export const getUserByToken = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const { name, lastName, email, password, height }: iUser = req.body
-    const inputs = [name, lastName, email, password, height]
+    const { name, lastName, email, password, height, weight, sex }: iUser = req.body.body || req.body
+    const inputs = [name, lastName, email, password, height, weight, sex]
+    const optionsSex = ['m', 'f']
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
       if (inputs[num] === null || inputs[num] === undefined || String(inputs[num]).trim() === '') {
-        return res.status(400).send(status400('Preencha todos os campos!'))
+        return res.status(400).send(status400(`Preencha todos os campos! ${[num]}`))
       }
     }
 
-    if (password.length < 6 || password.length > 16) {
-      return res.status(400).send(status400('A senha deve contar mais de 6 caracteres e no máximo 16!'))
+    if (password.length < 8 || password.length > 32) {
+      return res.status(400).send(status400('A senha deve contar mais de 8 caracteres e no máximo 32!'))
     }
 
     if ((/\s/g).test(password) === true) {
       return res.status(400).send(status400('A senha não pode haver espaços!'))
+    }
+
+    // @ts-ignore
+    if (!optionsSex.includes(sex)) {
+      return res.status(400).send(status400('Selecione seu sexo!'))
     }
 
     // eslint-disable-next-line
@@ -165,6 +171,8 @@ export const create = async (req: Request, res: Response) => {
         email: String(email).trim(),
         height: Number(height),
         password: hashedPassword,
+        sex: String(sex),
+        weight: Number(weight),
         passwordResetExpires: new Date('2000-01-01'),
         passwordResetToken: 'initial'
       }
@@ -173,11 +181,15 @@ export const create = async (req: Request, res: Response) => {
     // RETURN
     status200('Usuário Cadastrado!')
     return res.status(200).send({
-      id: userData.id,
-      name: userData.name,
-      lastName: userData.lastName,
-      email: userData.email,
-      height: userData.height,
+      user: {
+        id: userData.id,
+        name: userData.name,
+        lastName: userData.lastName,
+        email: userData.email,
+        height: userData.height,
+        weight: userData.weight,
+        sex: userData.sex
+      },
       token: await generateTokenUser(userData.id)
     })
 

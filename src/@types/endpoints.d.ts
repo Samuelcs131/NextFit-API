@@ -4,6 +4,8 @@ export interface iUser {
     email: string
     password: string
     height: number
+    weight: number
+    sex: string
 }
 
 export interface iBodyMeasurements {

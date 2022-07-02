@@ -16,6 +16,8 @@ model User {
   lastName String
   email String @unique
   height Float
+  weight Int
+  sex String
   password String
   passwordResetToken String
   passwordResetExpires DateTime

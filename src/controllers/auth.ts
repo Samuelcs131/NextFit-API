@@ -46,7 +46,9 @@ const auth = async (req: Request, res: Response) => {
             name: userData.name,
             lastName: userData.lastName,
             email: userData.email,
-            height: userData.height
+            height: userData.height,
+            weight: userData.weight,
+            sex: userData.sex
           },
           token: await generateTokenUser(userData.id)
         })
