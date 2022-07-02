@@ -107,7 +107,9 @@ export const getUserByToken = async (req: Request, res: Response) => {
         name: user?.name,
         lastName: user?.lastName,
         email: user?.email,
-        height: user?.height
+        height: user?.height,
+        weight: user?.weight,
+        sex: user?.sex
       })
     } catch (error) {
       console.log(error)
