@@ -31,3 +31,17 @@ export interface iTreining {
     series: number
     interval: number
 }
+
+// MUSCLES
+export interface iFindOnlyMuscles {
+    muscleId: string
+}
+export interface iCreateMuscle {
+    name: string
+    members: string
+}
+export interface iUpdateMuscle {
+    name: string
+    members: string
+    muscleId: string
+}

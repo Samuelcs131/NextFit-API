@@ -112,7 +112,7 @@ export const create = async (req: Request, res: Response) => {
     // REGISTER TREINING
     await prisma.training.create({
       data: {
-        name: name.trim(),
+        exercisesId: '',
         userId: String(userId),
         weight,
         repetitions,
@@ -169,7 +169,7 @@ export const update = async (req: Request, res: Response) => {
       await prisma.training.update({
         where: { id: trainingId },
         data: {
-          name: name.trim(),
+          exercisesId: '',
           weight,
           repetitions,
           series,
