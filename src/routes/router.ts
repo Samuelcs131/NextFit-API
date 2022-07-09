@@ -23,6 +23,11 @@ import * as measurementsGet from '@controllers/measurements/get'
 import * as measurementsPost from '@controllers/measurements/post'
 import * as measurementsPacth from '@controllers/measurements/patch'
 import * as measurementsDelete from '@controllers/measurements/delete'
+// EXERCISES
+import * as exercisesGet from '@controllers/exercises/get'
+import * as exercisesPost from '@controllers/exercises/post'
+import * as exercisesPut from '@controllers/exercises/put'
+import * as exercisesDelete from '@controllers/exercises/delete'
 
 // CONTROLLERS
 const routes = express.Router()
@@ -59,11 +64,18 @@ routes.patch('/measurements/:id', authMiddleware, measurementsPacth.updateMeasur
 routes.delete('/measurements/:id', authMiddleware, measurementsDelete.deleteMeasurement)
 
 // MUSCLES
-routes.get('/measurements', musclesGet.findAllMuscles)
-routes.get('/measurements/:id', musclesGet.findMuscleById)
-routes.delete('/measurements/:id', musclesDelete.deleteOnlyMuscle)
-routes.post('/measurements', musclesPost.createMuscle)
-routes.put('/measurements/:id', musclesPut.updateMuscle)
+routes.get('/muscles', musclesGet.findAllMuscles)
+routes.get('/muscles/:id', musclesGet.findMuscleById)
+routes.delete('/muscles/:id', musclesDelete.deleteOnlyMuscle)
+routes.post('/muscles', musclesPost.createMuscle)
+routes.put('/muscles/:id', musclesPut.updateMuscle)
+
+// EXERCISES
+routes.get('/exercises', exercisesGet.findExercises)
+routes.get('/exercises/:id', exercisesGet.findOnlyExercises)
+routes.post('/exercises', exercisesPost.createExercises)
+routes.put('/exercises/:id', exercisesPut.updateExercises)
+routes.delete('/exercises/:id', exercisesDelete.deleteExercises)
 
 // AUTH
 routes.post('/auth', auth)

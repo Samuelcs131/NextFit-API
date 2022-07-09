@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Muscles, PrismaClient } from '@prisma/client'
-import { status400, status500 } from '@controllers/response/status'
+import { status200, status400, status500 } from '@controllers/response/status'
 
 const prisma = new PrismaClient()
 
@@ -25,6 +25,7 @@ export const createMuscle = async (req: Request, res: Response) => {
     })
 
     res.status(200).send(muscles)
+    status200('Musculo criado com sucesso!')
   } catch (error) {
     res.status(500).send(status500(error))
   }

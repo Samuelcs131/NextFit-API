@@ -1,15 +1,14 @@
 import { Request, Response } from 'express'
-import { Muscles, PrismaClient } from '@prisma/client'
+import { Exercises, PrismaClient } from '@prisma/client'
 import { status200, status400, status500 } from '@controllers/response/status'
 
 const prisma = new PrismaClient()
 
-// UPDATE MUSCLE
-export const updateMuscle = async (req: Request, res: Response) => {
+// CREATE EXERCISES
+export const createExercises = async (req: Request, res: Response) => {
   try {
-    const { name, members }: Muscles = req.body.body || req.body
-    const muscleId: string = req.params.id
-    const inputs = [name, members, muscleId]
+    const { name, img, muscleId }: Exercises = req.body.body || req.body
+    const inputs = [name, img, muscleId]
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -19,17 +18,17 @@ export const updateMuscle = async (req: Request, res: Response) => {
     }
 
     try {
-      const muscles = await prisma.muscles.update({
-        where: { id: muscleId },
+      const muscles = await prisma.exercises.create({
         data: {
           name: String(name).trim(),
-          members: String(members).trim()
+          img: String(img).trim(),
+          muscleId: String(muscleId)
         }
       })
       res.status(200).send(muscles)
-      status200('Musculo atualizado com sucesso!')
+      status200('Exercício cadastrado com sucesso!')
     } catch (error) {
-      res.status(400).send(status400('Músculo inexistente ou músculo já cadastrado!'))
+      res.status(400).send(status400('Exercício inexistente ou Exercício já cadastrado!'))
     }
   } catch (error) {
     res.status(500).send(status500(error))
