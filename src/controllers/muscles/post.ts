@@ -1,14 +1,13 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
+import { Muscles, PrismaClient } from '@prisma/client'
 import { status400, status500 } from '@controllers/response/status'
-import { iCreateMuscle } from 'src/@types/endpoints'
 
 const prisma = new PrismaClient()
 
 // CREATE MUSCLE
 export const createMuscle = async (req: Request, res: Response) => {
   try {
-    const { name, members }: iCreateMuscle = req.body.body || req.body
+    const { name, members }: Muscles = req.body.body || req.body
     const inputs = [name, members]
 
     // VERIFY INPUTS

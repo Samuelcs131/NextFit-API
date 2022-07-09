@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express'
-import * as measurementsController from '@controllers/measurements'
 import path from 'path'
 // AUTH
 import auth from '@controllers/auth'
@@ -19,6 +18,11 @@ import * as trainingsGet from '@controllers/trainings/get'
 import * as trainingsPatch from '@controllers/trainings/patch'
 import * as trainingsPost from '@controllers/trainings/post'
 import * as trainingsDelete from '@controllers/trainings/delete'
+// MEASUREMENTS
+import * as measurementsGet from '@controllers/measurements/get'
+import * as measurementsPost from '@controllers/measurements/post'
+import * as measurementsPacth from '@controllers/measurements/patch'
+import * as measurementsDelete from '@controllers/measurements/delete'
 
 // CONTROLLERS
 const routes = express.Router()
@@ -47,12 +51,12 @@ routes.patch('/trainings/:id', authMiddleware, trainingsPatch.updateTraining)
 routes.delete('/trainings/:id', authMiddleware, trainingsDelete.deleteTraining)
 
 // MEASUREMENTS
-routes.get('/measurements', measurementsController.index)
-routes.get('/measurements/:id', measurementsController.singleMeasurements)
-routes.get('/measurements/user/:id', authMiddleware, measurementsController.userMeasurements)
-routes.post('/measurements/:id', authMiddleware, measurementsController.create)
-routes.patch('/measurements/:id', authMiddleware, measurementsController.update)
-routes.delete('/measurements/:id', authMiddleware, measurementsController.exclude)
+routes.get('/measurements', measurementsGet.findMeasurements)
+routes.get('/measurements/:id', measurementsGet.findOnlyMeasurement)
+routes.get('/measurements/user/:id', authMiddleware, measurementsGet.findMeasurementsByIdUser)
+routes.post('/measurements/:id', authMiddleware, measurementsPost.createMeasurement)
+routes.patch('/measurements/:id', authMiddleware, measurementsPacth.updateMeasurement)
+routes.delete('/measurements/:id', authMiddleware, measurementsDelete.deleteMeasurement)
 
 // MUSCLES
 routes.get('/measurements', musclesGet.findAllMuscles)
