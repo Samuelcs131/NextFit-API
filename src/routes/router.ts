@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express'
 import * as measurementsController from '@controllers/measurements'
-import * as trainingController from '@controllers/trainings'
 import path from 'path'
 // AUTH
 import auth from '@controllers/auth'
@@ -15,6 +14,11 @@ import * as musclesGet from '@controllers/muscles/get'
 import * as musclesDelete from '@controllers/muscles/delete'
 import * as musclesPost from '@controllers/muscles/post'
 import * as musclesPut from '@controllers/muscles/put'
+// TRAININGS
+import * as trainingsGet from '@controllers/trainings/get'
+import * as trainingsPatch from '@controllers/trainings/patch'
+import * as trainingsPost from '@controllers/trainings/post'
+import * as trainingsDelete from '@controllers/trainings/delete'
 
 // CONTROLLERS
 const routes = express.Router()
@@ -35,12 +39,12 @@ routes.delete('/users/:id', authMiddleware, usersDelete.deleteUser)
 routes.put('/users/:id', authMiddleware, usersPut.updateUser)
 
 // TREINING
-routes.get('/trainings', trainingController.index)
-routes.get('/trainings/:id', trainingController.singleTraining)
-routes.get('/trainings/user/:id', authMiddleware, trainingController.userTrainings)
-routes.post('/trainings/:id', authMiddleware, trainingController.create)
-routes.patch('/trainings/:id', authMiddleware, trainingController.update)
-routes.delete('/trainings/:id', authMiddleware, trainingController.exclude)
+routes.get('/trainings', trainingsGet.findTrainings)
+routes.get('/trainings/:id', trainingsGet.findOnlyTrainingById)
+routes.get('/trainings/user/:id', authMiddleware, trainingsGet.findTrainingsByIdUser)
+routes.post('/trainings/:id', authMiddleware, trainingsPost.createTraining)
+routes.patch('/trainings/:id', authMiddleware, trainingsPatch.updateTraining)
+routes.delete('/trainings/:id', authMiddleware, trainingsDelete.deleteTraining)
 
 // MEASUREMENTS
 routes.get('/measurements', measurementsController.index)

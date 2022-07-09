@@ -68,7 +68,7 @@ model Training {
   userId String @db.ObjectId
   exercises Exercises @relation(fields: [exercisesId], references: [id])
   exercisesId String @db.ObjectId
-  data DateTime
+  date DateTime
   series Int
   repetitions Json
   weight Float
