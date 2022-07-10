@@ -93,7 +93,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const email : string = req.body.email.trim()
+    const email : string = req.body.body.email.trim() || req.body.email.trim()
 
     // VERIFY INPUTS
     // eslint-disable-next-line
@@ -160,9 +160,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const passwordResetToken: string = req.body.resetToken || req.body.body.resetToken
-    const password: string = req.body.password || req.body.body.password
-    const email: string = req.body.email || req.body.body.email
+    const passwordResetToken: string = req.body.body.resetToken || req.body.resetToken
+    const password: string = req.body.body.password || req.body.password
+    const email: string = req.body.body.email || req.body.email
 
     if (password.length < 6 || password.length > 16) {
       return res.status(400).send(status400('A senha deve contar mais de 6 caracteres e no máximo 16!'))
