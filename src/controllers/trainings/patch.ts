@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 export const updateTraining = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const { weight, series, interval }: Training = req.body.body || req.body
+    const { weight, series, interval, exercisesId }: Training = req.body.body || req.body
     const trainingId: string = req.params.id
     const repetitions: Array<number> = req.body.repetitions
     const date: string = req.body.date.split('-').reverse().join('-')
@@ -40,12 +40,12 @@ export const updateTraining = async (req: Request, res: Response) => {
       await prisma.training.update({
         where: { id: trainingId },
         data: {
-          exercisesId: '',
-          weight,
+          exercisesId: String(exercisesId).trim(),
+          weight: Number(weight),
           repetitions,
-          series,
-          interval,
-          data: new Date(date)
+          series: Number(series),
+          interval: Number(interval),
+          date: new Date(date)
         }
       })
 

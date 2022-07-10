@@ -10,10 +10,10 @@ export const createTraining = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const { exercisesId, weight, series, interval }: Training = req.body
-    const repetitions: string[] = req.body.repetitions
+    const repetitions: Array<string> = req.body.repetitions
     const userId: string = req.params.id
     const date: string = req.body.date.split('-').reverse().join('-')
-    const inputs = [weight, series, date, repetitions, interval]
+    const inputs = [weight, series, date, repetitions, interval, exercisesId]
 
     // VERIFY INPUTS
     for (let num = 0; num < inputs.length; num++) {
@@ -39,20 +39,20 @@ export const createTraining = async (req: Request, res: Response) => {
     // REGISTER TREINING
     await prisma.training.create({
       data: {
-        exercisesId: String(exercisesId),
-        userId: String(userId),
-        weight,
+        exercisesId: String(exercisesId).trim(),
+        userId: String(userId).trim(),
+        weight: Number(weight),
         repetitions,
-        series,
-        data: new Date(date),
-        interval,
+        series: Number(series),
+        date: new Date(date),
+        interval: Number(interval),
         createAt: dateNow
       }
     })
 
     // RETURN
+    res.status(204).send('Treino cadastrado!')
     status200('Treino cadastrado!')
-    return res.status(204).send('Treino cadastrado!')
 
   // ERROR!
   } catch (error) {

@@ -11,8 +11,8 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idUser: string = String(req.params.id)
-    const { name, lastName, email, height }: User = req.body.body || req.body
-    const inputs = [idUser, name, lastName, email, height]
+    const { name, lastName, email, height, weight }: User = req.body.body || req.body
+    const inputs = [idUser, name, lastName, email, height, weight]
     const idUserAuth: string = req.body.idUserAuth
 
     // VERIFY AUTH
@@ -32,9 +32,10 @@ export const updateUser = async (req: Request, res: Response) => {
       await prisma.user.update({
         where: { id: idUser },
         data: {
-          name: String(name.trim()),
-          lastName: String(lastName.trim()),
-          email: String(email),
+          name: String(name).trim(),
+          lastName: String(lastName).trim(),
+          email: String(email).trim(),
+          weight: Number(weight),
           height: Number(height)
         }
       })

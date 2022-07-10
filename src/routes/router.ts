@@ -50,10 +50,10 @@ routes.put('/users/:id', authMiddleware, usersPut.updateUser)
 // TREINING
 routes.get('/trainings', trainingsGet.findTrainings)
 routes.get('/trainings/:id', trainingsGet.findOnlyTrainingById)
-routes.get('/trainings/user/:id', authMiddleware, trainingsGet.findTrainingsByIdUser)
-routes.post('/trainings/:id', authMiddleware, trainingsPost.createTraining)
-routes.patch('/trainings/:id', authMiddleware, trainingsPatch.updateTraining)
-routes.delete('/trainings/:id', authMiddleware, trainingsDelete.deleteTraining)
+routes.get('/trainings/user/:id', trainingsGet.findTrainingsByIdUser)
+routes.post('/trainings/:id', trainingsPost.createTraining)
+routes.patch('/trainings/:id', trainingsPatch.updateTraining)
+routes.delete('/trainings/:id', trainingsDelete.deleteTraining)
 
 // MEASUREMENTS
 routes.get('/measurements', measurementsGet.findMeasurements)

@@ -22,7 +22,7 @@ export const createExercises = async (req: Request, res: Response) => {
         data: {
           name: String(name).trim(),
           img: String(img).trim(),
-          muscleId: String(muscleId)
+          muscleId: String(muscleId).trim()
         }
       })
       res.status(200).send(muscles)

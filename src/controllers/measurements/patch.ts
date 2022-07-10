@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { iBodyMeasurements } from 'src/@types/endpoints'
+import { BodyMeasurements, PrismaClient } from '@prisma/client'
 import { status200, status400, status500 } from '../response/status'
 
 const prisma = new PrismaClient()
@@ -10,7 +9,8 @@ export const updateMeasurement = async (req: Request, res: Response) => {
   try {
     // PARAMS
     const idMenasurement: string = req.params.id
-    const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight, idUser }: iBodyMeasurements = req.body
+    const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight }: BodyMeasurements = req.body
+    const idUser: string = req.params.id
     const date: string = req.body.date.split('-').reverse().join('-')
     const idUserAuth = req.body.idUserAuth
     const inputs = [abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight]
@@ -36,19 +36,19 @@ export const updateMeasurement = async (req: Request, res: Response) => {
       where: { id: idMenasurement },
       data: {
         date: new Date(date),
-        abdomen,
-        breastplate,
-        deltoid,
-        gluteal,
-        leftArm,
-        leftCalf,
-        leftForearm,
-        leftThigh,
-        rightArm,
-        rightCalf,
-        rightForearm,
-        rightThigh,
-        weight
+        abdomen: Number(abdomen),
+        breastplate: Number(breastplate),
+        deltoid: Number(deltoid),
+        gluteal: Number(gluteal),
+        leftArm: Number(leftArm),
+        leftCalf: Number(leftCalf),
+        leftForearm: Number(leftForearm),
+        leftThigh: Number(leftThigh),
+        rightArm: Number(rightArm),
+        rightCalf: Number(rightCalf),
+        rightForearm: Number(rightForearm),
+        rightThigh: Number(rightThigh),
+        weight: Number(weight)
       }
     })
 

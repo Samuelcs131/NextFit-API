@@ -16,8 +16,8 @@ export const deleteTraining = async (req: Request, res: Response) => {
     })
 
     // RETURN
+    res.status(204).send('Treino excluido!')
     status200('Treino excluido!')
-    return res.status(204).send('Treino excluido!')
 
     // ERROR!
   } catch (error) {

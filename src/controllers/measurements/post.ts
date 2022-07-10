@@ -35,21 +35,21 @@ export const createMeasurement = async (req: Request, res: Response) => {
     await prisma.bodyMeasurements.create({
       data: {
         date: new Date(date),
-        abdomen,
-        breastplate,
-        deltoid,
-        gluteal,
-        leftArm,
-        leftCalf,
-        leftForearm,
-        leftThigh,
-        rightArm,
-        rightCalf,
-        rightForearm,
-        rightThigh,
-        weight,
+        abdomen: Number(abdomen),
+        breastplate: Number(breastplate),
+        deltoid: Number(deltoid),
+        gluteal: Number(gluteal),
+        leftArm: Number(leftArm),
+        leftCalf: Number(leftCalf),
+        leftForearm: Number(leftForearm),
+        leftThigh: Number(leftThigh),
+        rightArm: Number(rightArm),
+        rightCalf: Number(rightCalf),
+        rightForearm: Number(rightForearm),
+        rightThigh: Number(rightThigh),
+        weight: Number(weight),
         createAt: dateNow,
-        userId: idUser
+        userId: String(idUser).trim()
       }
     })
 

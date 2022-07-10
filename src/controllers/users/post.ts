@@ -60,8 +60,8 @@ export const createUser = async (req: Request, res: Response) => {
         lastName: String(lastName).trim(),
         email: String(email).trim(),
         height: Number(height),
-        password: hashedPassword,
-        sex: String(sex),
+        password: String(hashedPassword).trim(),
+        sex: String(sex).trim(),
         weight: Number(weight),
         passwordResetExpires: new Date('2000-01-01'),
         passwordResetToken: 'initial'
@@ -136,7 +136,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         await prisma.user.update({
           where: { email },
           data: {
-            passwordResetToken: token,
+            passwordResetToken: String(token).trim(),
             passwordResetExpires: dateNow
           }
         })
@@ -193,8 +193,8 @@ export const resetPassword = async (req: Request, res: Response) => {
     await prisma.user.update({
       where: { email },
       data: {
-        password: hashedPassword,
-        passwordResetToken: token
+        password: String(hashedPassword).trim(),
+        passwordResetToken: String(token).trim()
       }
 
       // RETURN
