@@ -131,6 +131,7 @@ export const htmlTemplateEmail = (user: User, token: string) => {
       }
       
       .button--green {
+        color: white;
         background-color: #22BC66;
         border-top: 10px solid #22BC66;
         border-right: 18px solid #22BC66;
@@ -435,7 +436,7 @@ export const htmlTemplateEmail = (user: User, token: string) => {
               <tr>
                 <td class="email-masthead">
                   <a href="https://nextfitt.vercel.app" class="f-fallback email-masthead_name">
-                    <img src="https://nextfitt.vercel.app/img/logo-nextfit.svg" alt="logo nextfit">
+                    <img src="https://nextfitt.vercel.app/img/logo-nextfit.png" alt="logo nextfit">
                 </a>
                 </td>
               </tr>
