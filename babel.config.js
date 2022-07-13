@@ -16,7 +16,8 @@ module.exports = {
         '@routes': './src/routes',
         '@controllers': './src/controllers',
         '@config': './src/config',
-        '@resources': './src/resources'
+        '@resources': './src/resources',
+        '@services': './src/services'
       }
     }]
   ],

@@ -7,6 +7,7 @@ import { generateTokenUser, varifyApiKey } from '../token/generateToken'
 import { randomBytes } from 'crypto'
 import sgMail from '@sendgrid/mail'
 import dateNow from '@resources/dateNow'
+import { htmlTemplateEmail } from 'src/services/template'
 
 const prisma = new PrismaClient()
 
@@ -101,7 +102,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(400).send(status400('Email invalido!'))
     }
 
-    const user = await prisma.user.findUnique({ where: { email } })
+    const user: User | null = await prisma.user.findUnique({ where: { email } })
 
     if (!user) {
       return res.status(400).send(status400('Usuário não encontrado!'))
@@ -124,19 +125,14 @@ export const forgotPassword = async (req: Request, res: Response) => {
       from: 'samuelcs131@gmail.com',
       to: email,
       subject: 'Recupere sua senha | NextFit',
-      html: ` <h1>Roi gata kk</h1>
-        <p>Esqueceu a senha né vacilona?!</p>
-        <p>Não tem problema, é muito fácil criar uma nova é só arrastar pra cima! brinks kk aperta no link pô! não é virus relaxa<p>
-                <a href="https://nextfitt.vercel.app/password/${email}/${token}">CLIQUE AQUI PARA RECUPERAR SUA SENHA</a>
-                <p>Se você não solicitou a recuperação de senha, ignore este e-mail. Algum salafrario ta tentando ter acesso a sua conta mas relaxa que o site do pai é seguro! #confia</p>
-        `
+      html: htmlTemplateEmail(user, token)
 
     }).then(
       async () => {
         await prisma.user.update({
           where: { email },
           data: {
-            passwordResetToken: String(token).trim(),
+            passwordResetToken: token,
             passwordResetExpires: dateNow
           }
         })
