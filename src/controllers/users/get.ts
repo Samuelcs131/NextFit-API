@@ -33,7 +33,7 @@ export const findUsers = async (req: Request, res: Response) => {
   }
 }
 
-// FIND ONLY USER
+// FIND ONLY USER BY EMAIL
 export const findOnlyUserByEmail = async (req: Request, res: Response) => {
   try {
     // PARAMS

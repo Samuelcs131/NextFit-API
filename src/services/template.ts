@@ -456,7 +456,7 @@ export const htmlTemplateEmail = (user: User, token: string) => {
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                                   <tr>
                                     <td align="center">
-                                      <a href="https://nextfitt.vercel.app/resetPassword/${user.email}/${token}" style="color: white;" class="f-fallback button button--green" target="_blank">Redefinir sua senha</a>
+                                      <a href="https://nextfitt.vercel.app/password/reset/${user.email}/${token}" style="color: white;" class="f-fallback button button--green" target="_blank">Redefinir sua senha</a>
                                     </td>
                                   </tr>
                                 </table>
@@ -473,7 +473,7 @@ export const htmlTemplateEmail = (user: User, token: string) => {
                               <td>
                                 <p class="f-fallback sub">Se você estiver tendo problemas com o botão acima, copie e cole o URL abaixo em seu navegador da web.</p>
   
-                                <p class="f-fallback sub">https://nextfitt.vercel.app/resetPassword/${user.email}/${token}</p>
+                                <p class="f-fallback sub">https://nextfitt.vercel.app/password/reset/${user.email}/${token}</p>
                               </td>
                             </tr>
                           </table>
