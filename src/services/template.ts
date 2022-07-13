@@ -1,7 +1,5 @@
 import { User } from '@prisma/client'
 
-// https://nextfitt.vercel.app/resetPassword/${email}/${token}"
-
 export const htmlTemplateEmail = (user: User, token: string) => {
   const template = `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -131,7 +129,6 @@ export const htmlTemplateEmail = (user: User, token: string) => {
       }
       
       .button--green {
-        color: white;
         background-color: #22BC66;
         border-top: 10px solid #22BC66;
         border-right: 18px solid #22BC66;
@@ -399,8 +396,8 @@ export const htmlTemplateEmail = (user: User, token: string) => {
       
       @media (prefers-color-scheme: dark) {
         body {
-          background-color: #333081 !important;
-          color: #FFF !important;
+          background-color: #FFF !important;
+          color: #757575 !important;
         }
         p,
         ul,
@@ -411,7 +408,7 @@ export const htmlTemplateEmail = (user: User, token: string) => {
         h3,
         span,
         .purchase_item {
-          color: #FFF !important;
+          color: #757575 !important;
         }
         .attributes_content,
         .discount {
@@ -459,7 +456,7 @@ export const htmlTemplateEmail = (user: User, token: string) => {
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                                   <tr>
                                     <td align="center">
-                                      <a href="https://nextfitt.vercel.app/resetPassword/${user.email}/${token}" class="f-fallback button button--green" target="_blank">Redefinir sua senha</a>
+                                      <a href="https://nextfitt.vercel.app/resetPassword/${user.email}/${token}" style="color: white;" class="f-fallback button button--green" target="_blank">Redefinir sua senha</a>
                                     </td>
                                   </tr>
                                 </table>
