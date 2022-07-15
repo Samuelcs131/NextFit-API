@@ -108,9 +108,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(400).send(status400('Usuário não encontrado!'))
     }
 
-    /* if (dateNow < user.passwordResetExpires) {
+    if (dateNow < user.passwordResetExpires) {
       return res.status(400).send(status400('Email já foi enviado aguarde um tempo para solicitar novamente!'))
-    } */
+    }
 
     // DATE
     dateNow.setHours(dateNow.getHours() + 2)
