@@ -8,11 +8,23 @@ const prisma = new PrismaClient()
 export const findExercises = async (req: Request, res: Response) => {
   try {
     // SEARCH USERS
+    const muscles = await prisma.muscles.findMany()
+    // SEARCH USERS
     const exercises = await prisma.exercises.findMany()
 
     // RETURN
     status200('Pesquisa realizada!')
-    res.status(200).send(exercises)
+    res.status(200).send(exercises.map(
+      (exercise) => {
+        return ({
+          id: exercise.id,
+          muscle: muscles.find((muscle) => muscle.id === exercise.muscleId)?.name,
+          members: muscles.find((muscle) => muscle.id === exercise.muscleId)?.members,
+          name: exercise.name,
+          img: exercise.img
+        })
+      }
+    ))
 
     // ERROR!
   } catch (error) {
