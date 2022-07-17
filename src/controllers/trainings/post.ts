@@ -9,10 +9,10 @@ const prisma = new PrismaClient()
 export const createTraining = async (req: Request, res: Response) => {
   try {
     // PARAMS
-    const { exercisesId, weight, series, interval }: Training = req.body
-    const repetitions: Array<string> = req.body.repetitions
+    const { exercisesId, weight, series, interval }: Training = req.body.body || req.body
+    const date: string = (req.body.date || req.body.body.date).split('-').reverse().join('-')
+    const repetitions: Array<number> = req.body.repetitions || req.body.body.repetitions
     const userId: string = req.params.id
-    const date: string = req.body.date.split('-').reverse().join('-')
     const inputs = [weight, series, date, repetitions, interval, exercisesId]
 
     // VERIFY INPUTS
@@ -34,6 +34,14 @@ export const createTraining = async (req: Request, res: Response) => {
 
     if (repetitions.length !== series) {
       return res.status(400).send(status400('O número de repetições não corresponde ao de serie!'))
+    }
+
+    if (repetitions.length > 10) {
+      return res.status(400).send(status400('O número máximo de repetições do vetor é 10!'))
+    }
+
+    if (repetitions.some((value: number) => value > 99)) {
+      return res.status(400).send(status400('O número máximo de repetições é 99!'))
     }
 
     // REGISTER TREINING
