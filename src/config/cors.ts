@@ -4,7 +4,7 @@ const corsConfig: CorsOptions = {
   origin: ['https://nextfitt.vercel.app', 'http://localhost:3000'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
-  optionsSuccessStatus: 204,
+  optionsSuccessStatus: 200,
   credentials: true
 }
 
