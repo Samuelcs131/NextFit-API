@@ -101,6 +101,9 @@ export const findTrainingsByIdUserAndDate = async (req: Request, res: Response) 
     try {
       // SEARCH USERS
       const trainings = await prisma.training.findMany({
+        orderBy: {
+          date: 'asc'
+        },
         where: {
           userId: idUser,
           OR: [{
