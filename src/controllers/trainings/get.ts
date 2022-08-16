@@ -32,9 +32,23 @@ export const findOnlyTrainingById = async (req: Request, res: Response) => {
         where: { id: idTreining }
       })
 
+      const exercises = await prisma.exercises.findMany()
+
+      const muscles = await prisma.muscles.findMany()
+
       // RETURN
       status200('Pesquisa realizada!')
-      res.status(200).send(training)
+      res.status(200).send({
+        id: training?.id,
+        exercise: exercises.find((exercise) => exercise.id === training?.exercisesId)?.name,
+        muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training?.exercisesId)?.muscleId)?.name,
+        date: training?.date,
+        series: training?.series,
+        repetitions: training?.repetitions,
+        weight: training?.weight,
+        interval: training?.interval,
+        createAt: training?.createAt
+      })
 
       // ERROR!
     } catch (error) {
@@ -110,6 +124,61 @@ export const findTrainingsByIdUserAndDate = async (req: Request, res: Response) 
             date: { gte: date },
             AND: {
               date: { lte: lastDayOfMonth }
+            }
+          }]
+        }
+      })
+      const exercises = await prisma.exercises.findMany()
+
+      const muscles = await prisma.muscles.findMany()
+
+      // RETURN
+      status200('Pesquisa realizada!')
+      res.status(200).send(trainings.map((training) => {
+        return ({
+          id: training.id,
+          exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
+          muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
+          date: training.date,
+          series: training.series,
+          repetitions: training.repetitions,
+          weight: training.weight,
+          interval: training.interval,
+          createAt: training.createAt
+        })
+      }))
+
+      // ERROR!
+    } catch (error) {
+      return res.status(400).send(status400('O ID fornecido é invalido!'))
+    }
+
+    // ERROR!
+  } catch (error) {
+    return res.status(400).send(status500(error))
+  }
+}
+
+// FIND TRAININGS BY ID USER AND BETWEEN DATES
+export const findTrainingsByIdUserAndBetweenDates = async (req: Request, res: Response) => {
+  try {
+    // PARAMS
+    const idUser: string = String(req.params.id)
+    const dateInitial: Date = new Date(String(req.params.dateInitial).split('-').reverse().join('-'))
+    const dateFinal: Date = new Date(String(req.params.dateFinal).split('-').reverse().join('-'))
+
+    try {
+      // SEARCH USERS
+      const trainings = await prisma.training.findMany({
+        orderBy: {
+          date: 'asc'
+        },
+        where: {
+          userId: idUser,
+          OR: [{
+            date: { gte: dateInitial },
+            AND: {
+              date: { lte: dateFinal }
             }
           }]
         }

@@ -10,8 +10,8 @@ export const updateTraining = async (req: Request, res: Response) => {
     // PARAMS
     const { weight, series, interval, exercisesId }: Training = req.body.body || req.body
     const trainingId: string = req.params.id
-    const repetitions: Array<number> = req.body.repetitions
-    const date: string = req.body.date.split('-').reverse().join('-')
+    const repetitions: Array<number> = req.body.body.repetitions || req.body.repetitions
+    const date: string = (req.body.body.date || req.body.date).split('-').reverse().join('-')
     const inputs = [weight, series, trainingId, repetitions, date]
 
     // VERIFY INPUTS
