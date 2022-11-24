@@ -1,0 +1,187 @@
+{
+  "/exercises": {
+    "get": {
+      "tags": ["Exercicios"],
+      "summary": "Buscar exercicios",
+      "operationId": "findExercises",
+      "description": "Retorna todos os exercicios",
+      "responses": {
+        "200": {
+          "description": "A lista de usuarios.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "$ref": "#/components/schemas/Exercises",
+                "example": [
+                  {
+                    "id": "a1b2c3d4e5f6j7k8l9m10n11",
+                    "muscle": "Dorsal",
+                    "members": "Superiores",
+                    "name": "Remada unilateral com halter",
+                    "img": "remada-unilateral-com-halter"
+                  },
+                  {
+                    "id": "a1b2c3d4e5f6j7k8l9m10n11",
+                    "muscle": "Peito",
+                    "members": "Superiores",
+                    "name": "Flexão de braço",
+                    "img": "flexao-de-braco"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": ["Exercicios"],
+      "summary": "Criar exercicio",
+      "operationId": "createExercises",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type":"object",
+              "$ref": "#/components/schemas/Exercises_response"
+            },
+            "example": {
+              "name": "Remada unilateral com halter", 
+              "img": "flexao-de-braco", 
+              "muscleId": "123456789101113"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "A lista de usuarios.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object", 
+                "$ref": "#/components/schemas/Exercises_response",
+                "example": {
+                  "id": "637c558f3e7085c821b58af5",
+                  "muscleId": "62c6354a957247396e2beb3f",
+                  "name": "Remada unilateral com halter",
+                  "img": "remada-unilateral-com-halter"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/exercises/{id}": {
+    "get": {
+      "tags": ["Exercicios"],
+      "summary": "Buscar exercicio por id",
+      "operationId": "findOnlyExercises",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "description": "Retorna apenas um exercicio",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "id": {
+              "type": "string"
+            }
+      
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "A lista de usuarios.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/Exercises",
+                "example": {
+                  "id": "62c77b05ebab3efe6fb3cc2d",
+                  "muscle": "Dorsal",
+                  "members": "Superiores",
+                  "name": "Remada unilateral com halter",
+                  "img": "remada-unilateral-com-halter"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+   
+    "delete": {
+      "tags": ["Exercicios"],
+      "summary": "Apagar exercicio por id",
+      "operationId": "deleteExercises",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "description": "Retorna status da requisição",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "id": {
+              "type": "string"
+            }
+      
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Exercicio apagado com sucesso."
+        }
+      }
+    },
+    "put": {
+      "tags": ["Exercicios"],
+      "summary": "Atualizar exercicio por id",
+      "operationId": "updateExercises",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type":"object",
+              "$ref": "#/components/schemas/Exercises_response"
+            },
+            "example": {
+              "name": "Remada unilateral com halter", 
+              "img": "flexao-de-braco", 
+              "muscleId": "123456789101113"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "A lista de usuarios.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object", 
+                "$ref": "#/components/schemas/Exercises_response",
+                "example": {
+                  "id": "637c558f3e7085c821b58af5",
+                  "muscleId": "62c6354a957247396e2beb3f",
+                  "name": "Remada unilateral com halter",
+                  "img": "remada-unilateral-com-halter"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

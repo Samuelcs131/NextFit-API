@@ -1,0 +1,55 @@
+{
+    "/users": {
+    "get": {
+        "tags": [ "Usuarios" ],
+        "summary": "buscar usuarios",
+        "operationId": "updatePetWithForm",
+        "description": "Retorna todos os usuarios",
+        "responses": {
+        "200": {          
+            "description": "A lista de usuarios.",
+            "content": {
+            "application/json": {
+                "schema": {
+                "type": "array",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "height": {
+                        "type": "number" 
+                    }
+                },
+                "example": [
+                    {
+                        "id": "a1b2c3d4e5f6j7k8l9m10n11",
+                        "name": "Samuel",
+                        "lastName": "Claudino",
+                        "email": "nome@mail.com",
+                        "height": 172
+                    },
+                    {
+                        "id": "a1b2c3d4e5f6j7k8l9m10n11",
+                        "name": "Roberta",
+                        "lastName": "Camargo",
+                        "email": "nome@mail.com",
+                        "height": 160
+                    }
+                ]
+                }
+            }
+            }
+        }
+        }
+    }
+ }
+}
