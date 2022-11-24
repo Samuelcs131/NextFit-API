@@ -1,29 +1,27 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { status200, status500 } from '@controllers/response/status'
+import { statusCode } from 'src/utils/status'
+import * as MusclesService from '@services/prisma/muscles'
 
-const prisma = new PrismaClient()
-
-// FIND ALL MUSCLES
 export const findAllMuscles = async (req: Request, res: Response) => {
-  try {
-    const muscles = await prisma.muscles.findMany()
-    res.status(200).send(muscles)
-    status200('Pesquisa realizada com sucesso!')
-  } catch (error) {
-    res.status(500).send(status500(error))
+  const [error, muscles] = await MusclesService.findMany()
+
+  if (error) {
+    return res.status(404).send(statusCode({ status: 404 }))
   }
+
+  res.status(200).send(muscles)
 }
 
-// FIND MUSCLE BY ID
 export const findMuscleById = async (req: Request, res: Response) => {
-  try {
-    const muscleId: string = req.params.id
+  const muscleId: string = req.params.id
 
-    const muscles = await prisma.muscles.findFirst({ where: { id: muscleId } })
-    res.status(200).send(muscles)
-    status200('Pesquisa realizada com sucesso!')
-  } catch (error) {
-    res.status(500).send(status500(error))
+  const args = { where: { id: muscleId } }
+
+  const [error, muscles] = await MusclesService.findFirst(args)
+
+  if (error) {
+    return res.status(404).send(statusCode({ status: 404 }))
   }
+
+  res.status(200).send(muscles)
 }
