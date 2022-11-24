@@ -22,5 +22,5 @@ app.use('/', routes)
 
 // RUNNING SERVER
 app.listen(process.env.PORT, () => {
-  return console.log(`🚀 ${clc.cyan('[NextFit]')} Servidor rodando em http://localhost:${PORT} 🚀`)
+  return console.log(`${clc.cyan('[NextFit]')} Servidor rodando em http://localhost:${PORT}`)
 })
