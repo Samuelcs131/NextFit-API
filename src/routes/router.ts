@@ -28,11 +28,16 @@ import * as exercisesGet from '@controllers/exercises/get'
 import * as exercisesPost from '@controllers/exercises/post'
 import * as exercisesPut from '@controllers/exercises/put'
 import * as exercisesDelete from '@controllers/exercises/delete'
+// SWAGGER
+import swaggerUi from 'swagger-ui-express'
+import { swaggerFile } from '@services/swagger'
 
 // CONTROLLERS
 const routes = express.Router()
 
 // INDEX
+routes.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 routes.get('/', (req: Request, res: Response) => {
   res.sendFile(path.resolve(__dirname, '..', '..', 'public/page/index.html'))
 })
