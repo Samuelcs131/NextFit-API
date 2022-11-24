@@ -7,7 +7,7 @@ import { generateTokenUser, varifyApiKey } from '../token/generateToken'
 import { randomBytes } from 'crypto'
 import sgMail from '@sendgrid/mail'
 import dateNow from '@resources/dateNow'
-import { htmlTemplateEmail } from '@services/template'
+import { htmlTemplateEmail } from '@services/template/template-email'
 
 const prisma = new PrismaClient()
 
