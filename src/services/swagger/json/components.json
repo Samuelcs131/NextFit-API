@@ -1,0 +1,41 @@
+{
+  "schemas": {
+    "Exercises": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "muscle": {
+          "type": "string"
+        },
+        "members": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "img": {
+          "type": "string"
+        }
+      }
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "status": "number",
+        "code": "string",
+        "message": "string"
+      }
+    },
+    "Exercises_response": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "muscleId": { "type": "string" },
+        "name": { "type": "string" },
+        "img": { "type": "string" }
+      }
+    }
+  }
+}

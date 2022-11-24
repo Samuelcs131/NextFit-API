@@ -1,0 +1,13 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API NextFit",
+    "description": "Descrição API NextFit",
+    "contact": {
+      "email": "samuelcs131@gmail.com",
+      "name": "Samuel",
+      "url": "https://samuelclaudino.vercel.app"
+    },
+    "version": "1.0.0"
+  }
+}
