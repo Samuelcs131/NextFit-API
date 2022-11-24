@@ -1,25 +1,19 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { status200, status500 } from '../response/status'
+import { statusCode } from 'src/utils/status'
+import * as ExercisesService from '@services/prisma/exercises'
 
-const prisma = new PrismaClient()
-
-// DELETE EXERCISES
 export const deleteExercises = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idExercises: string = req.params.id
+  const idExercises: string = req.params.id
 
-    // SEARCH USERS
-    await prisma.exercises.delete({
-      where: { id: idExercises }
-    })
-
-    // RETURN
-    res.status(204).send()
-    status200('Exercício excluído com sucesso!')
-    // ERROR!
-  } catch (error) {
-    res.status(500).send(status500(error))
+  const args = {
+    where: { id: idExercises }
   }
+
+  const [error] = await ExercisesService.exclude(args)
+
+  if (error) {
+    return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
+  }
+
+  res.status(204)
 }
