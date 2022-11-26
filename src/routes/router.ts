@@ -73,8 +73,8 @@ routes.post('/muscles', musclesPost.createMuscle)
 routes.put('/muscles/:id', musclesPut.updateMuscle)
 
 // EXERCISES
-routes.get('/exercises', exercisesGet.findExercises)
-routes.get('/exercises/:id', exercisesGet.findOnlyExercises)
+routes.get('/exercises', exercisesGet.getAllExercises)
+routes.get('/exercises/:id', exercisesGet.getExercisesById)
 routes.post('/exercises', exercisesPost.createExercises)
 routes.put('/exercises/:id', exercisesPut.updateExercises)
 routes.delete('/exercises/:id', exercisesDelete.deleteExercises)

@@ -3,11 +3,12 @@ import { statusCode } from 'src/utils/status'
 import * as ExercisesService from '@services/prisma/exercises'
 import * as MusclesService from '@services/prisma/muscles'
 
-export const findExercises = async (req: Request, res: Response) => {
+export const getAllExercises = async (req: Request, res: Response) => {
   const musclesPromisse = MusclesService.findMany()
   const exercisesPromisse = ExercisesService.findMany()
 
-  const [musclesResolved, exercisesResolved] = await Promise.all([musclesPromisse, exercisesPromisse])
+  const [musclesResolved, exercisesResolved] =
+  await Promise.all([musclesPromisse, exercisesPromisse])
 
   const [musclesError, muscles] = musclesResolved
   const [exercisesError, exercises] = exercisesResolved
@@ -31,7 +32,7 @@ export const findExercises = async (req: Request, res: Response) => {
   res.status(200).send(exercicesFormated)
 }
 
-export const findOnlyExercises = async (req: Request, res: Response) => {
+export const getExercisesById = async (req: Request, res: Response) => {
   const idExercises: string = req.params.id
 
   const args = {
