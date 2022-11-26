@@ -61,7 +61,7 @@ routes.delete('/trainings/:id', trainingsDelete.deleteTraining)
 routes.get('/bodyMeasurements', measurementsGet.getAllBodyMeasurements)
 routes.get('/bodyMeasurements/:id', measurementsGet.getBodyMeasurementById)
 routes.get('/bodyMeasurements/user/:id', authMiddleware, measurementsGet.getAllBodyMeasurementsByIdUser)
-routes.post('/bodyMeasurements/:id', authMiddleware, measurementsPost.createMeasurement)
+routes.post('/bodyMeasurements', authMiddleware, measurementsPost.createMeasurement)
 routes.patch('/bodyMeasurements/:id', authMiddleware, measurementsPacth.updateMeasurement)
 routes.delete('/bodyMeasurements/:id', authMiddleware, measurementsDelete.deleteBodyMeasurement)
 
