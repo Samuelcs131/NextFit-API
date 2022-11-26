@@ -5,7 +5,6 @@ import { verifyNumber, verifyString } from '@utils/verifications/valid'
 import { statusCode } from '@utils/status'
 import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
 
-// CREATE MEASUREMENT
 export const createMeasurement = async (req: Request, res: Response) => {
   const userId: string = req.body.userId
   const userAuthId: string = req.body.userAuthId
