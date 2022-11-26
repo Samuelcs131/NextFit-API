@@ -58,12 +58,12 @@ routes.patch('/trainings/:id', trainingsPatch.updateTraining)
 routes.delete('/trainings/:id', trainingsDelete.deleteTraining)
 
 // MEASUREMENTS
-routes.get('/measurements', measurementsGet.findMeasurements)
-routes.get('/measurements/:id', measurementsGet.findOnlyMeasurement)
-routes.get('/measurements/user/:id', authMiddleware, measurementsGet.findMeasurementsByIdUser)
-routes.post('/measurements/:id', authMiddleware, measurementsPost.createMeasurement)
-routes.patch('/measurements/:id', authMiddleware, measurementsPacth.updateMeasurement)
-routes.delete('/measurements/:id', authMiddleware, measurementsDelete.deleteMeasurement)
+routes.get('/bodyMeasurements', measurementsGet.getAllBodyMeasurements)
+routes.get('/bodyMeasurements/:id', measurementsGet.getBodyMeasurementById)
+routes.get('/bodyMeasurements/user/:id', authMiddleware, measurementsGet.getAllBodyMeasurementsByIdUser)
+routes.post('/bodyMeasurements/:id', authMiddleware, measurementsPost.createMeasurement)
+routes.patch('/bodyMeasurements/:id', authMiddleware, measurementsPacth.updateMeasurement)
+routes.delete('/bodyMeasurements/:id', authMiddleware, measurementsDelete.deleteBodyMeasurement)
 
 // MUSCLES
 routes.get('/muscles', musclesGet.getAllMuscles)

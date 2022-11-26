@@ -1,69 +1,59 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { status200, status400, status500 } from '../response/status'
+import { statusCode } from '@utils/status'
+import { verifyString } from '@utils/verifications/valid'
+import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
 
-const prisma = new PrismaClient()
+export const getAllBodyMeasurements = async (req: Request, res: Response) => {
+  const [error, bodyMeasurements] = await BodyMeasurementsService.findMany()
 
-// FIND MEASUREMENTS
-export const findMeasurements = async (req: Request, res: Response) => {
-  try {
-    // SEARCH USERS
-    const measurements = await prisma.bodyMeasurements.findMany()
-
-    // RETURN
-    status200('Pesquisa realizada!')
-    res.status(200).send(measurements)
-
-    // ERROR!
-  } catch (error) {
-    res.status(500).send(status500(error))
+  if (error) {
+    res.status(404).send(statusCode({ status: 404, error: error.meta?.message }))
   }
+
+  res.status(200).send(bodyMeasurements)
 }
 
-// FIND ONLY MEASUREMENT
-export const findOnlyMeasurement = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idMeasurements: string = req.params.id
+export const getBodyMeasurementById = async (req: Request, res: Response) => {
+  const measurementId: string = req.params.id
 
-    // SEARCH USERS
-    const measurements = await prisma.bodyMeasurements.findUnique({
-      where: { id: idMeasurements }
-    })
-
-    // RETURN
-    status200('Pesquisa realizada!')
-    res.status(200).send(measurements)
-
-    // ERROR!
-  } catch (error) {
-    res.status(500).send(status500(error))
+  if (verifyString([measurementId])) {
+    res.status(400).send(statusCode({ status: 400 }))
   }
+
+  const args = {
+    where: { id: measurementId }
+  }
+
+  const [error, bodymeasurement] = await BodyMeasurementsService.findUnique(args)
+
+  if (error) {
+    res.status(404).send(statusCode({ status: 404, error: error.meta?.message }))
+  }
+
+  res.status(200).send(bodymeasurement)
 }
 
-// FIND MEASUREMENTS BY ID USER
-export const findMeasurementsByIdUser = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idUser: string = req.params.id
-    const idUserAuth: string = req.body.idUserAuth
+export const getAllBodyMeasurementsByIdUser = async (req: Request, res: Response) => {
+  const userId: string = req.params.id
+  const userAuthId: string = req.body.userAuthId
 
-    // VERIFY AUTH
-    if (idUserAuth !== idUser) {
-      return res.status(401).send(status400('Usuário não autorizado!'))
-    }
-
-    // SEARCH USERS
-    const measurements = await prisma.bodyMeasurements.findMany({
-      where: { userId: idUser }
-    })
-
-    // RETURN
-    status200('Pesquisa realizada!')
-    res.status(200).send(measurements)
-
-    // ERROR!
-  } catch (error) {
-    res.status(500).send(status500(error))
+  if (verifyString([userId, userAuthId])) {
+    return res.status(400).send(statusCode({ status: 400 }))
   }
+
+  if (userAuthId !== userId) {
+    return res.status(403).send(statusCode({ status: 403 }))
+  }
+
+  const args = {
+    where: { userId }
+  }
+
+  const [error, bodyMeasurements] = await BodyMeasurementsService.findMany(args)
+
+  if (error) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  res.status(200).send(bodyMeasurements)
 }

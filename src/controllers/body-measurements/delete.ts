@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 import { verifyString } from '@utils/verifications/valid'
 import { statusCode } from '@utils/status'
-import * as BodyMeasurements from '@services/prisma/bodyMeasurements'
+import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
 
-export const deleteMeasurement = async (req: Request, res: Response) => {
-  const measurementsId: string = req.params.id
+export const deleteBodyMeasurement = async (req: Request, res: Response) => {
+  const bodyMeasurementId: string = req.params.id
   const userAuthId: string = req.body.userAuthId
   const userId: string = req.body.userId
 
-  if (verifyString([measurementsId, userAuthId, userId])) {
+  if (verifyString([bodyMeasurementId, userAuthId, userId])) {
     return res.status(400).send(statusCode({ status: 400 }))
   }
 
@@ -17,10 +17,10 @@ export const deleteMeasurement = async (req: Request, res: Response) => {
   }
 
   const args = {
-    where: { id: measurementsId }
+    where: { id: bodyMeasurementId }
   }
 
-  const [error] = await BodyMeasurements.exclude(args)
+  const [error] = await BodyMeasurementsService.exclude(args)
 
   if (error) {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
