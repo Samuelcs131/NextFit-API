@@ -8,12 +8,12 @@ import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
 // CREATE MEASUREMENT
 export const createMeasurement = async (req: Request, res: Response) => {
   const userId: string = req.body.userId
-  const userAuthId = req.body.userAuthId
+  const userAuthId: string = req.body.userAuthId
   const { abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight }: BodyMeasurements = req.body
   const date: string = $date(reverseDateFormat(req.body.date), true).format()
 
   if (
-    verifyString([userId]) ||
+    verifyString([userId, userAuthId]) ||
     verifyNumber([abdomen, breastplate, deltoid, gluteal, leftArm, leftCalf, leftForearm, leftThigh, rightArm, rightCalf, rightForearm, rightThigh, weight]) ||
     $date(date, true).isValid()
   ) {
