@@ -37,7 +37,7 @@ routes.get('/', (req: Request, res: Response) => {
   res.sendFile(path.resolve(__dirname, '..', '..', 'public/page/index.html'))
 })
 
-// USER
+// USERS
 routes.get('/users', usersGet.findUsers)
 routes.get('/users/email/:email', usersGet.findOnlyUserByEmail)
 routes.get('/users/token', authMiddleware, usersGet.findUserByToken)
@@ -47,12 +47,12 @@ routes.post('/users/reset_password', usersPost.resetPassword)
 routes.delete('/users/:id', authMiddleware, usersDelete.deleteUser)
 routes.put('/users/:id', authMiddleware, usersPut.updateUser)
 
-// TREINING
-routes.get('/trainings', trainingsGet.findTrainings)
-routes.get('/trainings/:id', trainingsGet.findOnlyTrainingById)
-routes.get('/trainings/user/:id', trainingsGet.findTrainingsByIdUser)
-routes.get('/trainings/user/:id/:date', trainingsGet.findTrainingsByIdUserAndDate)
-routes.get('/trainings/user/:id/date/:dateInitial/:dateFinal', trainingsGet.findTrainingsByIdUserAndBetweenDates)
+// TRAININGS
+routes.get('/trainings', trainingsGet.getAllTrainings)
+routes.get('/trainings/:id', trainingsGet.getTrainingById)
+routes.get('/trainings/user/:userId', trainingsGet.getAllTrainingsByIdUser)
+routes.get('/trainings/user/:userId/date/:date', trainingsGet.getTrainingsOfMonthByIdUser)
+routes.get('/trainings/user/:userId/dateInitial/:dateInitial/dateFinal/:dateFinal', trainingsGet.getTrainingsBetweenDatesByUserId)
 routes.post('/trainings/:id', trainingsPost.createTraining)
 routes.patch('/trainings/:id', trainingsPatch.updateTraining)
 routes.delete('/trainings/:id', trainingsDelete.deleteTraining)
