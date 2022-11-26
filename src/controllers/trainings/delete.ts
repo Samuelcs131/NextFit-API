@@ -1,26 +1,24 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { status200, status500 } from '../response/status'
+import { statusCode } from 'src/utils/status'
+import * as TrainingsService from '@services/prisma/trainings'
+import { verifyString } from 'src/utils/verifications/valid'
 
-const prisma = new PrismaClient()
-
-// DELETE TRAINING
 export const deleteTraining = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const trainingId: string = req.params.id
+  const trainingId: string = req.params.id
 
-    // REGISTER TRAINING
-    await prisma.training.delete({
-      where: { id: trainingId }
-    })
-
-    // RETURN
-    res.status(204).send('Treino excluido!')
-    status200('Treino excluido!')
-
-    // ERROR!
-  } catch (error) {
-    return res.status(500).send(status500(error))
+  if (verifyString([trainingId])) {
+    res.status(400).send(statusCode({ status: 400 }))
   }
+
+  const args = {
+    where: { id: trainingId }
+  }
+
+  const [error] = await TrainingsService.exclude(args)
+
+  if (error) {
+    return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
+  }
+
+  res.status(204)
 }

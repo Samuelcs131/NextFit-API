@@ -1,215 +1,208 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { status200, status400, status500 } from '../response/status'
+import { statusCode } from 'src/utils/status'
+import * as TrainingsService from '@services/prisma/trainings'
+import * as ExercisesService from '@services/prisma/exercises'
+import * as MusclesService from '@services/prisma/muscles'
+import { Prisma } from '@prisma/client'
+import { $date, reverseDateFormat } from 'src/utils/date/date-functions'
+import { verifyString } from 'src/utils/verifications/valid'
 
-const prisma = new PrismaClient()
+export const getAllTrainings = async (req: Request, res: Response) => {
+  const [error, training] = await TrainingsService.findMany()
 
-// FIND TRAININGS
-export const findTrainings = async (req: Request, res: Response) => {
-  try {
-    // SEARCH USERS
-    const training = await prisma.training.findMany()
-
-    // RETURN
-    status200('Pesquisa realizada!')
-    res.status(200).send(training)
-
-    // ERROR!
-  } catch (error) {
-    return res.status(400).send(status500(error))
+  if (error) {
+    return res.status(404).send(statusCode({ status: 404 }))
   }
+
+  res.status(200).send(training)
 }
 
-// FIND ONLY TRAINING BY ID
-export const findOnlyTrainingById = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idTreining: string = String(req.params.id)
+export const getTrainingById = async (req: Request, res: Response) => {
+  const trainingId: string = req.params.id
 
-    try {
-      // SEARCH USERS
-      const training = await prisma.training.findUnique({
-        where: { id: idTreining }
-      })
-
-      const exercises = await prisma.exercises.findMany()
-
-      const muscles = await prisma.muscles.findMany()
-
-      // RETURN
-      status200('Pesquisa realizada!')
-      res.status(200).send({
-        id: training?.id,
-        exercise: exercises.find((exercise) => exercise.id === training?.exercisesId)?.name,
-        muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training?.exercisesId)?.muscleId)?.name,
-        date: training?.date,
-        series: training?.series,
-        repetitions: training?.repetitions,
-        weight: training?.weight,
-        interval: training?.interval,
-        createAt: training?.createAt
-      })
-
-      // ERROR!
-    } catch (error) {
-      console.log(error)
-      return res.status(400).send(status400('O ID fornecido é invalido!'))
-    }
-
-    // ERROR!
-  } catch (error) {
-    return res.status(400).send(status500(error))
+  const args = {
+    where: { id: trainingId }
   }
+
+  const trainingPromisse = TrainingsService.findUnique(args)
+  const exercisesPromisse = ExercisesService.findMany()
+  const musclesPromisse = MusclesService.findMany()
+
+  const [trainingsResponse, exercisesResponse, musclesResponse] =
+  await Promise.all([trainingPromisse, exercisesPromisse, musclesPromisse])
+
+  const [trainingError, training] = trainingsResponse
+  const [exercisesError, exercises] = exercisesResponse
+  const [musclesError, muscles] = musclesResponse
+
+  if (trainingError || exercisesError || musclesError) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  const formated = {
+    id: training?.id,
+    exercise: exercises.find((exercise) => exercise.id === training?.exercisesId)?.name,
+    muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training?.exercisesId)?.muscleId)?.name,
+    date: training?.date,
+    series: training?.series,
+    repetitions: training?.repetitions,
+    weight: training?.weight,
+    interval: training?.interval,
+    createAt: training?.createAt
+  }
+
+  res.status(200).send(formated)
 }
 
-// FIND TRAININGS BY ID USER
-export const findTrainingsByIdUser = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idUser: string = String(req.params.id)
+export const getAllTrainingsByIdUser = async (req: Request, res: Response) => {
+  const userId: string = req.params.userId
 
-    try {
-      // SEARCH USERS
-      const trainings = await prisma.training.findMany({
-        where: { userId: idUser }
-      })
-      const exercises = await prisma.exercises.findMany()
-
-      const muscles = await prisma.muscles.findMany()
-
-      // RETURN
-      status200('Pesquisa realizada!')
-      res.status(200).send(trainings.map((training) => {
-        return ({
-          id: training.id,
-          exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
-          muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
-          date: training.date,
-          series: training.series,
-          repetitions: training.repetitions,
-          weight: training.weight,
-          interval: training.interval,
-          createAt: training.createAt
-        })
-      }))
-
-      // ERROR!
-    } catch (error) {
-      return res.status(400).send(status400('O ID fornecido é invalido!'))
-    }
-
-    // ERROR!
-  } catch (error) {
-    return res.status(400).send(status500(error))
+  const args = {
+    where: { userId }
   }
+  const trainingsPromisse = TrainingsService.findMany(args)
+  const exercisesPromisse = ExercisesService.findMany()
+  const musclesPromisse = MusclesService.findMany()
+
+  const [trainingsResponse, exercisesResponse, musclesResponse] =
+      await Promise.all([trainingsPromisse, exercisesPromisse, musclesPromisse])
+
+  const [trainingError, trainings] = trainingsResponse
+  const [exercisesError, exercises] = exercisesResponse
+  const [musclesError, muscles] = musclesResponse
+
+  if (trainingError || exercisesError || musclesError) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  res.status(200).send(trainings.map((training) => {
+    return ({
+      id: training.id,
+      exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
+      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
+      date: training.date,
+      series: training.series,
+      repetitions: training.repetitions,
+      weight: training.weight,
+      interval: training.interval,
+      createAt: training.createAt
+    })
+  }))
 }
 
-// FIND TRAININGS BY ID USER AND DATE
-export const findTrainingsByIdUserAndDate = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idUser: string = String(req.params.id)
-    const date: Date = new Date(String(req.params.date).split('-').reverse().join('-'))
-    const lastDayOfMonth: Date = new Date(date.getFullYear(), date.getMonth() + 2, 0)
+export const getTrainingsOfMonthByIdUser = async (req: Request, res: Response) => {
+  const userId = req.params.userId
+  const date: string = $date(reverseDateFormat(req.params.date), true).format()
+  const lastDayOfMonth: string = $date(reverseDateFormat(req.params.date), true).endOf('M').format()
 
-    try {
-      // SEARCH USERS
-      const trainings = await prisma.training.findMany({
-        orderBy: {
-          date: 'asc'
-        },
-        where: {
-          userId: idUser,
-          OR: [{
-            date: { gte: date },
-            AND: {
-              date: { lte: lastDayOfMonth }
-            }
-          }]
+  if (
+    verifyString([userId]) ||
+    !$date(date, true).isValid()
+  ) {
+    return res.status(400).send(statusCode({ status: 400 }))
+  }
+
+  const args: Prisma.TrainingFindManyArgs = {
+    orderBy: {
+      date: 'asc'
+    },
+    where: {
+      userId,
+      OR: [{
+        date: { gte: date },
+        AND: {
+          date: { lte: lastDayOfMonth }
         }
-      })
-      const exercises = await prisma.exercises.findMany()
-
-      const muscles = await prisma.muscles.findMany()
-
-      // RETURN
-      status200('Pesquisa realizada!')
-      res.status(200).send(trainings.map((training) => {
-        return ({
-          id: training.id,
-          exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
-          muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
-          date: training.date,
-          series: training.series,
-          repetitions: training.repetitions,
-          weight: training.weight,
-          interval: training.interval,
-          createAt: training.createAt
-        })
-      }))
-
-      // ERROR!
-    } catch (error) {
-      return res.status(400).send(status400('O ID fornecido é invalido!'))
+      }]
     }
-
-    // ERROR!
-  } catch (error) {
-    return res.status(400).send(status500(error))
   }
+
+  const trainingsPromisse = TrainingsService.findMany(args)
+  const exercisesPromisse = ExercisesService.findMany()
+  const musclesPromisse = MusclesService.findMany()
+
+  const [trainingsResponse, exercisesResponse, musclesResponse] = await Promise.all([trainingsPromisse, exercisesPromisse, musclesPromisse])
+
+  const [trainingError, trainings] = trainingsResponse
+  const [exercisesError, exercises] = exercisesResponse
+  const [musclesError, muscles] = musclesResponse
+
+  if (trainingError || exercisesError || musclesError) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  const formated = trainings.map((training) => {
+    return ({
+      id: training.id,
+      exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
+      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
+      date: training.date,
+      series: training.series,
+      repetitions: training.repetitions,
+      weight: training.weight,
+      interval: training.interval,
+      createAt: training.createAt
+    })
+  })
+
+  res.status(200).send(formated)
 }
 
-// FIND TRAININGS BY ID USER AND BETWEEN DATES
-export const findTrainingsByIdUserAndBetweenDates = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idUser: string = String(req.params.id)
-    const dateInitial: Date = new Date(String(req.params.dateInitial).split('-').reverse().join('-'))
-    const dateFinal: Date = new Date(String(req.params.dateFinal).split('-').reverse().join('-'))
+export const getTrainingsBetweenDatesByUserId = async (req: Request, res: Response) => {
+  const userId: string = req.params.userId
+  const dateInitial: string = $date(reverseDateFormat(req.params.dateInitial), true).format()
+  const dateFinal: string = $date(reverseDateFormat(req.params.dateFinal), true).format()
 
-    try {
-      // SEARCH USERS
-      const trainings = await prisma.training.findMany({
-        orderBy: {
-          date: 'asc'
-        },
-        where: {
-          userId: idUser,
-          OR: [{
-            date: { gte: dateInitial },
-            AND: {
-              date: { lte: dateFinal }
-            }
-          }]
-        }
-      })
-      const exercises = await prisma.exercises.findMany()
-
-      const muscles = await prisma.muscles.findMany()
-
-      // RETURN
-      status200('Pesquisa realizada!')
-      res.status(200).send(trainings.map((training) => {
-        return ({
-          id: training.id,
-          exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
-          muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
-          date: training.date,
-          series: training.series,
-          repetitions: training.repetitions,
-          weight: training.weight,
-          interval: training.interval,
-          createAt: training.createAt
-        })
-      }))
-
-      // ERROR!
-    } catch (error) {
-      return res.status(400).send(status400('O ID fornecido é invalido!'))
-    }
-
-    // ERROR!
-  } catch (error) {
-    return res.status(400).send(status500(error))
+  if (
+    verifyString([userId]) ||
+    !$date(dateInitial, true).isValid() ||
+    !$date(dateFinal, true).isValid()
+  ) {
+    return res.status(400).send(statusCode({ status: 400 }))
   }
+
+  const args: Prisma.TrainingFindManyArgs = {
+    orderBy: {
+      date: 'asc'
+    },
+    where: {
+      userId,
+      OR: [{
+        date: { gte: dateInitial },
+        AND: {
+          date: { lte: dateFinal }
+        }
+      }]
+    }
+  }
+
+  const trainingsPromisse = TrainingsService.findMany(args)
+  const exercisesPromisse = ExercisesService.findMany()
+  const musclesPromisse = MusclesService.findMany()
+
+  const [trainingsResponse, exercisesResponse, musclesResponse] = await Promise.all([trainingsPromisse, exercisesPromisse, musclesPromisse])
+
+  const [trainingError, trainings] = trainingsResponse
+  const [exercisesError, exercises] = exercisesResponse
+  const [musclesError, muscles] = musclesResponse
+
+  if (trainingError || exercisesError || musclesError) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  const formated = trainings.map((training) => {
+    return ({
+      id: training.id,
+      exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
+      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
+      date: training.date,
+      series: training.series,
+      repetitions: training.repetitions,
+      weight: training.weight,
+      interval: training.interval,
+      createAt: training.createAt
+    })
+  })
+
+  res.status(200).send(formated)
 }
