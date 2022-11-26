@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { Training } from '@prisma/client'
-import { verifyArray, verifyNumber, verifyString } from 'src/utils/verifications/valid'
-import { statusCode } from 'src/utils/status'
-import { $date, reverseDateFormat } from 'src/utils/date/date-functions'
+import { verifyArray, verifyNumber, verifyString } from '@utils/verifications/valid'
+import { statusCode } from '@utils/status'
+import { $date, reverseDateFormat } from '@utils/date/date-functions'
 import * as TrainingsService from '@services/prisma/trainings'
 
 export const updateTraining = async (req: Request, res: Response) => {

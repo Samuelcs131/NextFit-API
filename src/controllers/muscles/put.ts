@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { Muscles } from '@prisma/client'
 import * as MusclesService from '@services/prisma/muscles'
-import { statusCode } from 'src/utils/status'
-import { verifyString } from 'src/utils/verifications/valid'
+import { statusCode } from '@utils/status'
+import { verifyString } from '@utils/verifications/valid'
 
 export const updateMuscle = async (req: Request, res: Response) => {
   const { name, members }: Muscles = req.body

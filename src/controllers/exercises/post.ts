@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Exercises } from '@prisma/client'
-import { statusCode } from 'src/utils/status'
-import { verifyString } from 'src/utils/verifications/valid'
+import { statusCode } from '@utils/status'
+import { verifyString } from '@utils/verifications/valid'
 import * as ExercisesService from '@services/prisma/exercises'
 
 export const createExercises = async (req: Request, res: Response) => {

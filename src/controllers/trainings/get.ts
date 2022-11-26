@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import { statusCode } from 'src/utils/status'
+import { statusCode } from '@utils/status'
 import * as TrainingsService from '@services/prisma/trainings'
 import * as ExercisesService from '@services/prisma/exercises'
 import * as MusclesService from '@services/prisma/muscles'
 import { Prisma } from '@prisma/client'
-import { $date, reverseDateFormat } from 'src/utils/date/date-functions'
-import { verifyString } from 'src/utils/verifications/valid'
+import { $date, reverseDateFormat } from '@utils/date/date-functions'
+import { verifyString } from '@utils/verifications/valid'
 
 export const getAllTrainings = async (req: Request, res: Response) => {
   const [error, training] = await TrainingsService.findMany()
