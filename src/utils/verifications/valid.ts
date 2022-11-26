@@ -26,3 +26,29 @@ export function verifyNumber<T> (numberFields: Array<T>) {
 
   return false
 }
+
+export function verifyArray<T> (arrayFields: Array<T>, type: string) {
+  if (Array.isArray(arrayFields) === false) return true
+
+  switch (type) {
+    case 'string':
+      for (let num = 0; num < arrayFields.length; num++) {
+        if (typeof arrayFields[num] !== 'string') {
+          return true
+        }
+      }
+      break
+
+    case 'number':
+      for (let num = 0; num < arrayFields.length; num++) {
+        if (typeof arrayFields[num] !== 'number') {
+          return true
+        }
+      }
+      break
+
+    default:
+  }
+
+  return false
+}
