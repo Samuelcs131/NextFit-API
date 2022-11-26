@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import path from 'path'
 // AUTH
 import auth from '@controllers/auth'
-import { authMiddleware } from '@controllers/middleware/auth'
+import { authMiddleware } from 'src/middlewares/auth'
 // USERS
 import * as usersGet from '@controllers/users/get'
 import * as usersPost from '@controllers/users/post'
