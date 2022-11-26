@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { statusCode } from 'src/utils/status'
 import * as MusclesService from '@services/prisma/muscles'
 
-export const findAllMuscles = async (req: Request, res: Response) => {
+export const getAllMuscles = async (req: Request, res: Response) => {
   const [error, muscles] = await MusclesService.findMany()
 
   if (error) {
@@ -12,7 +12,7 @@ export const findAllMuscles = async (req: Request, res: Response) => {
   res.status(200).send(muscles)
 }
 
-export const findMuscleById = async (req: Request, res: Response) => {
+export const getMuscleById = async (req: Request, res: Response) => {
   const muscleId: string = req.params.id
 
   const args = { where: { id: muscleId } }

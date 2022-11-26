@@ -66,8 +66,8 @@ routes.patch('/measurements/:id', authMiddleware, measurementsPacth.updateMeasur
 routes.delete('/measurements/:id', authMiddleware, measurementsDelete.deleteMeasurement)
 
 // MUSCLES
-routes.get('/muscles', musclesGet.findAllMuscles)
-routes.get('/muscles/:id', musclesGet.findMuscleById)
+routes.get('/muscles', musclesGet.getAllMuscles)
+routes.get('/muscles/:id', musclesGet.getMuscleById)
 routes.delete('/muscles/:id', musclesDelete.deleteOnlyMuscle)
 routes.post('/muscles', musclesPost.createMuscle)
 routes.put('/muscles/:id', musclesPut.updateMuscle)
