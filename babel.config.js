@@ -19,8 +19,7 @@ module.exports = {
         '@resources': './src/resources',
         '@services': './src/services',
         '@utils': './src/utils',
-        '@middlewares': './src/middlewares',
-        '@types': './src/types'
+        '@middlewares': './src/middlewares'
       }
     }]
   ],

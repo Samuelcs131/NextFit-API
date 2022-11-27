@@ -1,7 +1,7 @@
 import { User, Prisma, PrismaClient } from '@prisma/client'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { handleApiError, handleApiResult } from '@services/handleApi'
-import { IApiResponse } from '@types/api/IApiResponse.type'
+import { IApiResponse } from 'src/types/api/IApiResponse.type'
 
 const { user } = new PrismaClient()
 
