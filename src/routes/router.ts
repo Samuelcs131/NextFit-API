@@ -28,7 +28,7 @@ import * as exercisesGet from '@controllers/exercises/get'
 import * as exercisesPost from '@controllers/exercises/post'
 import * as exercisesPut from '@controllers/exercises/put'
 import * as exercisesDelete from '@controllers/exercises/delete'
-import { resolver } from '@resources/adapter/resolver'
+import { resolver } from '@middlewares/adapter/resolver'
 
 // CONTROLLERS
 const routes = express.Router()
