@@ -1,7 +1,7 @@
 import { Muscles, Prisma, PrismaClient } from '@prisma/client'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { handleApiError, handleApiResult } from '@services/handleApi'
-import { IApiResponse } from 'src/types/api/IApiResponse.type'
+import { IApiResponse } from 'src/types/api/IApiResponse'
 
 const { muscles } = new PrismaClient()
 
