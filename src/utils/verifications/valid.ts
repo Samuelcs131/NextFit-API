@@ -52,3 +52,15 @@ export function verifyArray<T> (arrayFields: Array<T>, type: string) {
 
   return false
 }
+
+export function verifyEmail (email: string) {
+  // eslint-disable-next-line
+  const regexEmail =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+  if (
+    email.match(regexEmail)
+  ) {
+    return false
+  } else {
+    return true
+  }
+}
