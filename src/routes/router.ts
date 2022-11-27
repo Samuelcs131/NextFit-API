@@ -28,6 +28,7 @@ import * as exercisesGet from '@controllers/exercises/get'
 import * as exercisesPost from '@controllers/exercises/post'
 import * as exercisesPut from '@controllers/exercises/put'
 import * as exercisesDelete from '@controllers/exercises/delete'
+import { resolver } from '@resources/adapter/resolver'
 
 // CONTROLLERS
 const routes = express.Router()
@@ -38,48 +39,48 @@ routes.get('/', (req: Request, res: Response) => {
 })
 
 // USERS
-routes.get('/users', usersGet.findUsers)
-routes.get('/users/email/:email', usersGet.findOnlyUserByEmail)
-routes.get('/users/token', authMiddleware, usersGet.findUserByToken)
-routes.post('/users', usersPost.createUser)
-routes.post('/users/forgot_password', usersPost.forgotPassword)
-routes.post('/users/reset_password', usersPost.resetPassword)
-routes.delete('/users/:id', authMiddleware, usersDelete.deleteUser)
-routes.put('/users/:id', authMiddleware, usersPut.updateUser)
+routes.get('/users', resolver(usersGet.getAllUsers))
+routes.get('/users/email/:email', resolver(usersGet.getUserByEmail))
+routes.get('/users/token', authMiddleware, resolver(usersGet.getUserByToken))
+routes.post('/users', resolver(usersPost.createUser))
+routes.post('/users/forgot_password', resolver(usersPost.forgotPassword))
+routes.post('/users/reset_password', resolver(usersPost.resetPassword))
+routes.delete('/users/:id', authMiddleware, resolver(usersDelete.deleteUser))
+routes.put('/users/:id', authMiddleware, resolver(usersPut.updateUser))
 
 // TRAININGS
-routes.get('/trainings', trainingsGet.getAllTrainings)
-routes.get('/trainings/:id', trainingsGet.getTrainingById)
-routes.get('/trainings/user/:userId', trainingsGet.getAllTrainingsByIdUser)
-routes.get('/trainings/user/:userId/date/:date', trainingsGet.getTrainingsOfMonthByIdUser)
-routes.get('/trainings/user/:userId/dateInitial/:dateInitial/dateFinal/:dateFinal', trainingsGet.getTrainingsBetweenDatesByUserId)
-routes.post('/trainings/:id', trainingsPost.createTraining)
-routes.patch('/trainings/:id', trainingsPatch.updateTraining)
-routes.delete('/trainings/:id', trainingsDelete.deleteTraining)
+routes.get('/trainings', resolver(trainingsGet.getAllTrainings))
+routes.get('/trainings/:id', resolver(trainingsGet.getTrainingById))
+routes.get('/trainings/user/:userId', resolver(trainingsGet.getAllTrainingsByIdUser))
+routes.get('/trainings/user/:userId/date/:date', resolver(trainingsGet.getTrainingsOfMonthByIdUser))
+routes.get('/trainings/user/:userId/dateInitial/:dateInitial/dateFinal/:dateFinal', resolver(trainingsGet.getTrainingsBetweenDatesByUserId))
+routes.post('/trainings/:id', resolver(trainingsPost.createTraining))
+routes.patch('/trainings/:id', resolver(trainingsPatch.updateTraining))
+routes.delete('/trainings/:id', resolver(trainingsDelete.deleteTraining))
 
 // MEASUREMENTS
-routes.get('/bodyMeasurements', measurementsGet.getAllBodyMeasurements)
-routes.get('/bodyMeasurements/:id', measurementsGet.getBodyMeasurementById)
-routes.get('/bodyMeasurements/user/:id', authMiddleware, measurementsGet.getAllBodyMeasurementsByIdUser)
-routes.post('/bodyMeasurements', authMiddleware, measurementsPost.createMeasurement)
-routes.patch('/bodyMeasurements/:id', authMiddleware, measurementsPacth.updateMeasurement)
-routes.delete('/bodyMeasurements/:id', authMiddleware, measurementsDelete.deleteBodyMeasurement)
+routes.get('/bodyMeasurements', resolver(measurementsGet.getAllBodyMeasurements))
+routes.get('/bodyMeasurements/:id', resolver(measurementsGet.getBodyMeasurementById))
+routes.get('/bodyMeasurements/user/:id', authMiddleware, resolver(measurementsGet.getAllBodyMeasurementsByIdUser))
+routes.post('/bodyMeasurements', authMiddleware, resolver(measurementsPost.createMeasurement))
+routes.patch('/bodyMeasurements/:id', authMiddleware, resolver(measurementsPacth.updateMeasurement))
+routes.delete('/bodyMeasurements/:id', authMiddleware, resolver(measurementsDelete.deleteBodyMeasurement))
 
 // MUSCLES
-routes.get('/muscles', musclesGet.getAllMuscles)
-routes.get('/muscles/:id', musclesGet.getMuscleById)
-routes.delete('/muscles/:id', musclesDelete.deleteOnlyMuscle)
-routes.post('/muscles', musclesPost.createMuscle)
-routes.put('/muscles/:id', musclesPut.updateMuscle)
+routes.get('/muscles', resolver(musclesGet.getAllMuscles))
+routes.get('/muscles/:id', resolver(musclesGet.getMuscleById))
+routes.delete('/muscles/:id', resolver(musclesDelete.deleteOnlyMuscle))
+routes.post('/muscles', resolver(musclesPost.createMuscle))
+routes.put('/muscles/:id', resolver(musclesPut.updateMuscle))
 
 // EXERCISES
-routes.get('/exercises', exercisesGet.getAllExercises)
-routes.get('/exercises/:id', exercisesGet.getExercisesById)
-routes.post('/exercises', exercisesPost.createExercises)
-routes.put('/exercises/:id', exercisesPut.updateExercises)
-routes.delete('/exercises/:id', exercisesDelete.deleteExercises)
+routes.get('/exercises', resolver(exercisesGet.getAllExercises))
+routes.get('/exercises/:id', resolver(exercisesGet.getExercisesById))
+routes.post('/exercises', resolver(exercisesPost.createExercises))
+routes.put('/exercises/:id', resolver(exercisesPut.updateExercises))
+routes.delete('/exercises/:id', resolver(exercisesDelete.deleteExercises))
 
 // AUTH
-routes.post('/auth', auth)
+routes.post('/auth', resolver(auth))
 
 export default routes
