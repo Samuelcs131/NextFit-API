@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as ExercisesService from '@services/prisma/exercises'
-import * as MusclesService from '@services/prisma/muscles'
+import * as ExercisesService from '@services/prisma/exercises.service'
+import * as MusclesService from '@services/prisma/muscles.service'
 
 export const getAllExercises = async (req: Request, res: Response) => {
   const musclesPromisse = MusclesService.findMany()

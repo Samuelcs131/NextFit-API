@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
 import { verifyEmail, verifyString } from '@utils/verifications/valid'
-import * as UsersService from '@services/prisma/users'
+import * as UsersService from '@services/prisma/users.service'
 
 export const getAllUsers = async (req: Request, res: Response) => {
   const [error, users] = await UsersService.findMany()

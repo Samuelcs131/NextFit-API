@@ -3,7 +3,7 @@ import { BodyMeasurements } from '@prisma/client'
 import { $date, reverseDateFormat } from '@utils/date/date-functions'
 import { verifyNumber, verifyString } from '@utils/verifications/valid'
 import { statusCode } from '@utils/status'
-import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
+import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements.service'
 
 export const createMeasurement = async (req: Request, res: Response) => {
   const userId: string = req.body.userId

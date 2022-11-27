@@ -3,7 +3,7 @@ import { compare } from 'bcrypt'
 import { generateTokenUser } from '../utils/token/generateToken'
 import { verifyEmail, verifyString } from '@utils/verifications/valid'
 import { statusCode } from '@utils/status'
-import * as UsersService from '@services/prisma/users'
+import * as UsersService from '@services/prisma/users.service'
 
 const auth = async (req: Request, res: Response) => {
   const email: string = req.body.email

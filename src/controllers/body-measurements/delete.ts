@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { verifyString } from '@utils/verifications/valid'
 import { statusCode } from '@utils/status'
-import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
+import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements.service'
 
 export const deleteBodyMeasurement = async (req: Request, res: Response) => {
   const bodyMeasurementId: string = req.params.id

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as UsersService from '@services/prisma/users'
-import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
-import * as TrainingsService from '@services/prisma/trainings'
+import * as UsersService from '@services/prisma/users.service'
+import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements.service'
+import * as TrainingsService from '@services/prisma/trainings.service'
 
 export const deleteUser = async (req: Request, res: Response) => {
   const userId: string = req.params.userId

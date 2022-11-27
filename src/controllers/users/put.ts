@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { User } from '@prisma/client'
 import { statusCode } from '@utils/status'
 import { verifyEmail, verifyNumber, verifyString } from '@utils/verifications/valid'
-import * as UsersService from '@services/prisma/users'
+import * as UsersService from '@services/prisma/users.service'
 
 export const updateUser = async (req: Request, res: Response) => {
   const userId: string = req.params.userId

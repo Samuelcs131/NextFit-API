@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as MusclesService from '@services/prisma/muscles'
+import * as MusclesService from '@services/prisma/muscles.service'
 
 export const getAllMuscles = async (req: Request, res: Response) => {
   const [error, muscles] = await MusclesService.findMany()

@@ -7,7 +7,7 @@ import { templateResetEmail } from '@resources/template/resetEmail'
 import { statusCode } from '@utils/status'
 import { verifyEmail, verifyNumber, verifyString } from '@utils/verifications/valid'
 import { $date } from '@utils/date/date-functions'
-import * as UsersService from '@services/prisma/users'
+import * as UsersService from '@services/prisma/users.service'
 import * as SendGridService from '@services/sendGrid/sendGrid.service'
 
 export const createUser = async (req: Request, res: Response) => {

@@ -3,7 +3,7 @@ import { Training } from '@prisma/client'
 import { $date, reverseDateFormat } from '@utils/date/date-functions'
 import { verifyArray, verifyNumber, verifyString } from '@utils/verifications/valid'
 import { statusCode } from '@utils/status'
-import * as TrainingsService from '@services/prisma/trainings'
+import * as TrainingsService from '@services/prisma/trainings.service'
 
 export const createTraining = async (req: Request, res: Response) => {
   const userId: string = req.params.id

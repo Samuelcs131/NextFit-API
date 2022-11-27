@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as ExercisesService from '@services/prisma/exercises'
+import * as ExercisesService from '@services/prisma/exercises.service'
 
 export const deleteExercises = async (req: Request, res: Response) => {
   const idExercises: string = req.params.id
