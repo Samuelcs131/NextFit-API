@@ -1,5 +1,5 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
-import { IApiResponse } from 'src/types/api/IApiResponse.type'
+import { IApiResponse } from 'src/types/api/IApiResponse'
 
 function handleApiResult<T> (apiResponse: T): IApiResponse<T> {
   return [null, apiResponse]

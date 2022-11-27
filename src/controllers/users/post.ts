@@ -9,7 +9,7 @@ import { verifyEmail, verifyNumber, verifyString } from 'src/validators/valid'
 import { $date } from '@utils/date/date-functions'
 import * as UsersService from '@services/prisma/users.service'
 import * as SendGridService from '@services/sendGrid/sendGrid.service'
-import env from '@config/variables'
+import { env } from '@config/envVariables'
 
 export const createUser = async (req: Request, res: Response) => {
   const { name, lastName, email, password, height, weight, sex }: User = req.body
@@ -92,7 +92,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     return res.status(419).send(statusCode({ status: 419 }))
   }
 
-  const [setApiKeyError] = await SendGridService.setApiKey(env.production.sendGrid)
+  const [setApiKeyError] = await SendGridService.setApiKey(env().sendGrid)
 
   if (setApiKeyError) {
     return res.status(500).send(statusCode({ status: 500, error: setApiKeyError }))

@@ -1,4 +1,4 @@
-import env from '@config/variables'
+import { env } from '@config/envVariables'
 import { compare } from 'bcrypt'
 
 export function verifyString<T> (stringFields: Array<T>) {
@@ -69,7 +69,8 @@ export function verifyEmail (email: string) {
 }
 
 export async function verifyApiKey (hash: string) {
-  const apiKey: Array<string> = env.production.authorization
+  const apiKey: Array<string> = env().authorization || []
+
   for (let num = 0; apiKey.length > num; num++) {
     if (await compare(apiKey[num], hash)) {
       return true
