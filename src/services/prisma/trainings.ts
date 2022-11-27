@@ -54,3 +54,13 @@ export async function exclude (args: Prisma.TrainingDeleteArgs): Promise<IApiRes
     return handleApiError(error as Error & PrismaClientKnownRequestError)
   }
 }
+
+export async function deleteMany (args: Prisma.TrainingDeleteManyArgs): Promise<IApiResponse<Prisma.BatchPayload>> {
+  try {
+    const trainingsPromisse = await training.deleteMany(args)
+
+    return handleApiResult(trainingsPromisse)
+  } catch (error) {
+    return handleApiError(error as Error & PrismaClientKnownRequestError)
+  }
+}
