@@ -1,48 +1,38 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { status200, status400, status500 } from '../response/status'
-/* eslint-disable-next-line */
-import { generateTokenUser, varifyApiKey } from '../token/generateToken'
+import { statusCode } from '@utils/status'
+import * as UsersService from '@services/prisma/users'
+import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements'
+import * as TrainingsService from '@services/prisma/trainings'
 
-const prisma = new PrismaClient()
-
-// DELETE USER
 export const deleteUser = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const idUser: string = String(req.params.id)
-    const idUserAuth: string = req.body.idUserAuth
+  const userId: string = req.params.userId
+  const userAuthId: string = req.body.userAuthId
 
-    // VERIFY AUTH
-    if (idUserAuth !== idUser) {
-      return res.status(401).send(status400('Usuário não autorizado!'))
-    }
-
-    // DELETE USER
-    try {
-      // DELETE TRAINING
-      await prisma.training.deleteMany({
-        where: { userId: idUser }
-      })
-
-      // DELETE MEASUREMENTS
-      await prisma.bodyMeasurements.deleteMany({
-        where: { userId: idUser }
-      })
-
-      await prisma.user.delete({
-        where: { id: idUser }
-      })
-    } catch (error) {
-      console.log(error)
-      return res.status(400).send(status400('Usúario inexistente!'))
-    }
-
-    // RETURN
-    status200('Usuário excluido!')
-    res.status(204).send('Usuário excluido!')
-  // ERROR!
-  } catch (error) {
-    return res.status(500).send(status500(error))
+  if (userAuthId !== userId) {
+    return res.status(403).send(statusCode({ status: 403 }))
   }
+
+  const trainingsPromisse = BodyMeasurementsService.deleteMany({
+    where: { userId }
+  })
+
+  const bodyMeasurementsPromisse = TrainingsService.deleteMany({
+    where: { userId }
+  })
+
+  const [trainingsError, bodyMeasurementsError] = await Promise.all([trainingsPromisse, bodyMeasurementsPromisse])
+
+  if (trainingsError || bodyMeasurementsError) {
+    return res.status(422).send(statusCode({ status: 422 }))
+  }
+
+  const [usersError] = await UsersService.exclude({
+    where: { id: userId }
+  })
+
+  if (usersError) {
+    return res.status(422).send(statusCode({ status: 422 }))
+  }
+
+  res.status(204)
 }
