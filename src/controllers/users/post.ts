@@ -3,8 +3,7 @@ import { User } from '@prisma/client'
 import { hash } from 'bcrypt'
 import { generateTokenUser } from '@utils/token/generateToken'
 import { randomBytes } from 'crypto'
-import dateNow from '@resources/dateNow'
-import { htmlTemplateEmail } from '@services/template'
+import { templateResetEmail } from '@resources/template/resetEmail'
 import { statusCode } from '@utils/status'
 import { verifyEmail, verifyNumber, verifyString } from '@utils/verifications/valid'
 import { $date } from '@utils/date/date-functions'
@@ -104,7 +103,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     from: 'samuelcs131@gmail.com',
     to: email,
     subject: 'Recupere sua senha | NextFit',
-    html: htmlTemplateEmail(user, tokenResetPassword)
+    html: templateResetEmail(user, tokenResetPassword)
   })
 
   if (sendError) {
@@ -146,7 +145,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
   if (
     passwordResetToken !== user.passwordResetToken ||
-    dateNow > user.passwordResetExpires
+    $date().toDate() > user.passwordResetExpires
   ) {
     return res.status(403).send(statusCode({ status: 403 }))
   }
