@@ -1,3 +1,5 @@
+import { compare } from 'bcrypt'
+
 export function verifyString<T> (stringFields: Array<T>) {
   for (let num = 0; num < stringFields.length; num++) {
     if (
@@ -63,4 +65,9 @@ export function verifyEmail (email: string) {
   } else {
     return true
   }
+}
+
+export function verifyApiKey (hash: string) {
+  const apiKey: string = process.env.NEXTFIT_API_KEY as string
+  return compare(apiKey, hash)
 }
