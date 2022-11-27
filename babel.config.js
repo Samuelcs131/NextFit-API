@@ -18,7 +18,8 @@ module.exports = {
         '@config': './src/config',
         '@resources': './src/resources',
         '@services': './src/services',
-        '@utils': './src/utils'
+        '@utils': './src/utils',
+        '@middlewares': './src/middlewares'
       }
     }]
   ],
