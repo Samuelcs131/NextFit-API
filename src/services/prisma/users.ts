@@ -45,6 +45,16 @@ export async function findUnique (args: Prisma.UserFindUniqueArgs): Promise<IApi
   }
 }
 
+export async function findFirst (args: Prisma.UserFindUniqueArgs): Promise<IApiResponse<User | null>> {
+  try {
+    const trainingsPromisse = await user.findFirst(args)
+
+    return handleApiResult(trainingsPromisse)
+  } catch (error) {
+    return handleApiError(error as Error & PrismaClientKnownRequestError)
+  }
+}
+
 export async function exclude (args: Prisma.UserDeleteArgs): Promise<IApiResponse<User>> {
   try {
     const trainingsPromisse = await user.delete(args)
