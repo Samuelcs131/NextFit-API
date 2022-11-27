@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { verify } from 'jsonwebtoken'
 import { statusCode } from '@utils/status'
-import { verifyString } from '@utils/verifications/valid'
+import { verifyString } from 'src/validators/valid'
 import secret from '@config/secret'
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {

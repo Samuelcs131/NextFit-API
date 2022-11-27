@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { verifyString } from '@utils/verifications/valid'
+import { verifyString } from 'src/validators/valid'
 import { statusCode } from '@utils/status'
 import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements.service'
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Training } from '@prisma/client'
-import { verifyArray, verifyNumber, verifyString } from '@utils/verifications/valid'
+import { verifyArray, verifyNumber, verifyString } from 'src/validators/valid'
 import { statusCode } from '@utils/status'
 import { $date, reverseDateFormat } from '@utils/date/date-functions'
 import * as TrainingsService from '@services/prisma/trainings.service'

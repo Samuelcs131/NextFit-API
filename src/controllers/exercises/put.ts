@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Exercises } from '@prisma/client'
 import { statusCode } from '@utils/status'
-import { verifyString } from '@utils/verifications/valid'
+import { verifyString } from 'src/validators/valid'
 import * as ExercisesService from '@services/prisma/exercises.service'
 
 export const updateExercises = async (req: Request, res: Response) => {

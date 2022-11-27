@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import { verifyEmail, verifyString } from '@utils/verifications/valid'
+import { verifyEmail, verifyString } from 'src/validators/valid'
 import * as UsersService from '@services/prisma/users.service'
 
 export const getAllUsers = async (req: Request, res: Response) => {

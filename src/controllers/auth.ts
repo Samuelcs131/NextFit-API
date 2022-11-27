@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { compare } from 'bcrypt'
 import { generateTokenUser } from '../utils/token/generateToken'
-import { verifyEmail, verifyString } from '@utils/verifications/valid'
+import { verifyEmail, verifyString } from 'src/validators/valid'
 import { statusCode } from '@utils/status'
 import * as UsersService from '@services/prisma/users.service'
 

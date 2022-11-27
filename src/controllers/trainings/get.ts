@@ -5,7 +5,7 @@ import * as ExercisesService from '@services/prisma/exercises.service'
 import * as MusclesService from '@services/prisma/muscles.service'
 import { Prisma } from '@prisma/client'
 import { $date, reverseDateFormat } from '@utils/date/date-functions'
-import { verifyString } from '@utils/verifications/valid'
+import { verifyString } from 'src/validators/valid'
 
 export const getAllTrainings = async (req: Request, res: Response) => {
   const [error, training] = await TrainingsService.findMany()

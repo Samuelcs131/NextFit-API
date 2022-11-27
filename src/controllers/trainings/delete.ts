@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
 import * as TrainingsService from '@services/prisma/trainings.service'
-import { verifyString } from '@utils/verifications/valid'
+import { verifyString } from 'src/validators/valid'
 
 export const deleteTraining = async (req: Request, res: Response) => {
   const trainingId: string = req.params.id

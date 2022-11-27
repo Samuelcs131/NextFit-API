@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import { verifyString } from '@utils/verifications/valid'
+import { verifyString } from 'src/validators/valid'
 import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements.service'
 
 export const getAllBodyMeasurements = async (req: Request, res: Response) => {

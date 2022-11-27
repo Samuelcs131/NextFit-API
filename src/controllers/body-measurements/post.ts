@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { BodyMeasurements } from '@prisma/client'
 import { $date, reverseDateFormat } from '@utils/date/date-functions'
-import { verifyNumber, verifyString } from '@utils/verifications/valid'
+import { verifyNumber, verifyString } from 'src/validators/valid'
 import { statusCode } from '@utils/status'
 import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements.service'
 
