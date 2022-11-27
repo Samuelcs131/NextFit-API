@@ -1,7 +1,7 @@
 import { Exercises, Prisma, PrismaClient } from '@prisma/client'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { handleApiError, handleApiResult } from '@services/handleApi'
-import { IApiResponse } from 'src/@types/service/IApiResponse.type'
+import { IApiResponse } from 'src/@types/api/IApiResponse.type'
 
 const { exercises } = new PrismaClient()
 

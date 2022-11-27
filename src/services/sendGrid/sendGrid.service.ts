@@ -1,6 +1,6 @@
 import sgMail, { ClientResponse, MailDataRequired, ResponseError } from '@sendgrid/mail'
 import { handleApiError, handleApiResult } from '@services/handleApi'
-import { IApiResponse } from 'src/@types/service/IApiResponse.type'
+import { IApiResponse } from 'src/@types/api/IApiResponse.type'
 
 export async function setApiKey (apiKey: string): Promise<IApiResponse<void>> {
   try {
