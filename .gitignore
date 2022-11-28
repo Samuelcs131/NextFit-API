@@ -6,3 +6,6 @@ app
 
 # testes files
 *test.js
+
+# yarn
+yarn-error.log
