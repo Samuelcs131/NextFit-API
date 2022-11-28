@@ -10,9 +10,9 @@ Em seguida inicie o servidor de desenvolvimento:
 
 ``yarn dev``
 
-## Atualizar as modificações nos models
+## Atualizar as modificações nos models do banco de dados
 
-``yarn prisma generate``
+``yarn prisma migration``
 
 
 ## Variaveis de ambiente
