@@ -91,3 +91,14 @@ export function verifyUserSex (fieldSex: string) {
       return true
   }
 }
+
+export function verifyPassword (fieldPassword: string) {
+  if (
+    fieldPassword.length < 8 ||
+    fieldPassword.length > 32 ||
+    (/\s/g).test(fieldPassword) === true
+  ) {
+    return true
+  }
+  return false
+}
