@@ -1,5 +1,6 @@
 import { env } from '@config/envVariables'
 import { compare } from 'bcrypt'
+import { IUserSex } from 'src/models/users/enums/IUserSex.enum'
 
 export function verifyString<T> (stringFields: Array<T>) {
   for (let num = 0; num < stringFields.length; num++) {
@@ -78,4 +79,15 @@ export async function verifyApiKey (hash: string) {
   }
 
   return false
+}
+
+export function verifyUserSex (fieldSex: string) {
+  switch (fieldSex) {
+    case IUserSex.female:
+      return false
+    case IUserSex.male:
+      return false
+    default:
+      return true
+  }
 }
