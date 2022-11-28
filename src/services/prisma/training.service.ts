@@ -7,9 +7,9 @@ const { training } = new PrismaClient()
 
 export async function update (args: Prisma.TrainingUpdateArgs): Promise<IApiResponse<Training>> {
   try {
-    const trainingsPromisse = await training.update(args)
+    const trainingPromisse = await training.update(args)
 
-    return handleApiResult(trainingsPromisse)
+    return handleApiResult(trainingPromisse)
   } catch (error) {
     return handleApiError(error as Error & PrismaClientKnownRequestError)
   }
@@ -17,9 +17,9 @@ export async function update (args: Prisma.TrainingUpdateArgs): Promise<IApiResp
 
 export async function create (args: Prisma.TrainingCreateArgs): Promise<IApiResponse<Training>> {
   try {
-    const trainingsPromisse = await training.create(args)
+    const trainingPromisse = await training.create(args)
 
-    return handleApiResult(trainingsPromisse)
+    return handleApiResult(trainingPromisse)
   } catch (error) {
     return handleApiError(error as Error & PrismaClientKnownRequestError)
   }
@@ -37,9 +37,9 @@ export async function findMany (args?: Prisma.TrainingFindManyArgs): Promise<IAp
 
 export async function findUnique (args: Prisma.TrainingFindUniqueArgs): Promise<IApiResponse<Training | null>> {
   try {
-    const trainingsPromisse = await training.findUnique(args)
+    const trainingPromisse = await training.findUnique(args)
 
-    return handleApiResult(trainingsPromisse)
+    return handleApiResult(trainingPromisse)
   } catch (error) {
     return handleApiError(error as Error & PrismaClientKnownRequestError)
   }
@@ -47,9 +47,9 @@ export async function findUnique (args: Prisma.TrainingFindUniqueArgs): Promise<
 
 export async function exclude (args: Prisma.TrainingDeleteArgs): Promise<IApiResponse<Training>> {
   try {
-    const trainingsPromisse = await training.delete(args)
+    const trainingPromisse = await training.delete(args)
 
-    return handleApiResult(trainingsPromisse)
+    return handleApiResult(trainingPromisse)
   } catch (error) {
     return handleApiError(error as Error & PrismaClientKnownRequestError)
   }
@@ -57,9 +57,9 @@ export async function exclude (args: Prisma.TrainingDeleteArgs): Promise<IApiRes
 
 export async function deleteMany (args: Prisma.TrainingDeleteManyArgs): Promise<IApiResponse<Prisma.BatchPayload>> {
   try {
-    const trainingsPromisse = await training.deleteMany(args)
+    const trainingPromisse = await training.deleteMany(args)
 
-    return handleApiResult(trainingsPromisse)
+    return handleApiResult(trainingPromisse)
   } catch (error) {
     return handleApiError(error as Error & PrismaClientKnownRequestError)
   }
