@@ -20,5 +20,5 @@ export const deleteTraining = async (req: Request, res: Response) => {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
   }
 
-  res.status(204)
+  return res.status(204).send()
 }
