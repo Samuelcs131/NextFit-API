@@ -17,7 +17,7 @@ model User {
   email String @unique
   height Float
   weight Int
-  sex String
+  sex Int
   typeUser Int
   password String
   passwordResetToken String
