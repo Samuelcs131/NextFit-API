@@ -1,6 +1,7 @@
 import { env } from '@config/envVariables'
 import { compare } from 'bcrypt'
-import { IUserSex } from 'src/models/users/enums/IUserSex.enum'
+import { UserSex } from 'src/models/users/enums/UserSex.enum'
+import { UserType } from 'src/models/users/enums/UserType.enum'
 
 export function verifyString<T> (stringFields: Array<T>) {
   for (let num = 0; num < stringFields.length; num++) {
@@ -81,11 +82,11 @@ export async function verifyApiKey (hash: string) {
   return false
 }
 
-export function verifyUserSex (fieldSex: string) {
+export function verifyUserSex (fieldSex: number) {
   switch (fieldSex) {
-    case IUserSex.female:
+    case UserSex.female:
       return false
-    case IUserSex.male:
+    case UserSex.male:
       return false
     default:
       return true
@@ -101,4 +102,15 @@ export function verifyPassword (fieldPassword: string) {
     return true
   }
   return false
+}
+
+export function verifyUserType (fieldUserType: number) {
+  switch (fieldUserType) {
+    case UserType.user:
+      return false
+    case UserType.admin:
+      return false
+    default:
+      return true
+  }
 }
