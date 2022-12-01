@@ -1,14 +1,22 @@
-// PORT
-PORT = 8080
+// # APP
+CONFIG = ""
 
-// DATABASE
+// # PORT
+PORT = ""
+
+// # DATABASE
 DATABASE_URL=""
 
-// SECRET
+// # SECRET
 SECRET=""
 
-// SENDGRID
+// # SENDGRID
 SENDGRID_API_KEY=""
 
-// API KEY
+// # API KEY
 NEXTFIT_API_KEY=""
+
+// ## -------------------------------------------------
+
+// # DEV DATABASE
+DEV_DATABASE_URL=""

@@ -1,10 +1,5 @@
 import clc from 'cli-color'
-
-interface IStatusCode {
-    status: number
-    name: string
-    message: string
-}
+import { IStatusCode } from 'src/types/api/IStatusCode'
 
 export function statusCode (data: { status: number, messageConsole?: string, error?: unknown }) {
   let statusCode = {} as IStatusCode

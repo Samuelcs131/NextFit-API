@@ -1,213 +1,170 @@
 import { Request, Response } from 'express'
-import { PrismaClient, User } from '@prisma/client'
+import { User } from '@prisma/client'
 import { hash } from 'bcrypt'
-import { status200, status400, status500 } from '../response/status'
-/* eslint-disable-next-line */
-import { generateTokenUser, varifyApiKey } from '../token/generateToken'
+import { generateTokenUser } from '@utils/token/generateToken'
 import { randomBytes } from 'crypto'
-import sgMail from '@sendgrid/mail'
-import dateNow from '@resources/dateNow'
-import { htmlTemplateEmail } from '@services/template'
+import { templateResetEmail } from '@resources/template/resetEmail'
+import { statusCode } from '@utils/status'
+import { verifyEmail, verifyNumber, verifyPassword, verifyString, verifyUserType, verifyUserSex } from 'src/validators/valid'
+import { $date } from '@utils/date/date-functions'
+import * as UserService from '@services/prisma/user.service'
+import * as SendGridService from '@services/sendGrid/sendGrid.service'
+import { env } from '@config/envVariables'
 
-const prisma = new PrismaClient()
-
-// CREATE USER
 export const createUser = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const { name, lastName, email, password, height, weight, sex }: User = req.body.body || req.body
-    const inputs = [name, lastName, email, password, height, weight, sex]
-    const optionsSex = ['m', 'f']
+  const { name, lastName, email, password, height, weight, sex, typeUser }: User = req.body
 
-    // VERIFY INPUTS
-    for (let num = 0; num < inputs.length; num++) {
-      if (inputs[num] === null || inputs[num] === undefined || String(inputs[num]).trim() === '') {
-        return res.status(400).send(status400(`Preencha todos os campos! ${[num]}`))
-      }
-    }
-
-    if (password.length < 8 || password.length > 32) {
-      return res.status(400).send(status400('A senha deve contar mais de 8 caracteres e no máximo 32!'))
-    }
-
-    if ((/\s/g).test(password) === true) {
-      return res.status(400).send(status400('A senha não pode haver espaços!'))
-    }
-
-    // @ts-ignore
-    if (!optionsSex.includes(sex)) {
-      return res.status(400).send(status400('Selecione seu sexo!'))
-    }
-
-    // eslint-disable-next-line
-      if (email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) === null) {
-      return res.status(400).send(status400('Email invalido!'))
-    }
-
-    // VERIFY EMAIL
-    const searchEmailUser = await prisma.user.findMany({ where: { email } })
-
-    if (searchEmailUser.length !== 0) {
-      return res.status(400).send(status400('Email já cadastrado!'))
-    }
-
-    // HASH PASSWORD
-    const hashedPassword: string = await hash(password, 10)
-
-    // REGISTER USER
-    const userData = await prisma.user.create({
-      data: {
-        name: String(name).trim(),
-        lastName: String(lastName).trim(),
-        email: String(email).trim(),
-        height: Number(height),
-        password: String(hashedPassword).trim(),
-        sex: String(sex).trim(),
-        weight: Number(weight),
-        passwordResetExpires: new Date('2000-01-01'),
-        passwordResetToken: 'initial'
-      }
-    })
-
-    // RETURN
-    status200('Usuário Cadastrado!')
-    return res.status(200).send({
-      user: {
-        id: userData.id,
-        name: userData.name,
-        lastName: userData.lastName,
-        email: userData.email,
-        height: userData.height,
-        weight: userData.weight,
-        sex: userData.sex
-      },
-      token: await generateTokenUser(userData.id)
-    })
-
-    // ERROR!
-  } catch (error) {
-    res.status(500).send(status500(error))
+  if (
+    verifyString([name, lastName, password]) ||
+    verifyNumber([height, weight]) ||
+    verifyEmail(email) ||
+    verifyUserSex(sex) ||
+    verifyPassword(password) ||
+    verifyUserType(typeUser)
+  ) {
+    return res.status(400).send(statusCode({ status: 400 }))
   }
+
+  const [verifyEmailError, verifyEmailExists] = await UserService.findMany({ where: { email } })
+
+  if (verifyEmailError) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  if (verifyEmailExists.length !== 0) {
+    return res.status(422).send(statusCode({ status: 422 }))
+  }
+
+  const hashedPassword: string = await hash(password, 10)
+
+  const args = {
+    data: {
+      name: name.trim(),
+      lastName: lastName.trim(),
+      email: email.trim(),
+      typeUser,
+      height,
+      password: hashedPassword.trim(),
+      sex,
+      weight,
+      passwordResetExpires: $date().format(),
+      passwordResetToken: 'initial'
+    }
+  }
+
+  const [error, user] = await UserService.create(args)
+
+  if (error) {
+    return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
+  }
+
+  const formated = {
+    user: {
+      id: user.id,
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+      height: user.height,
+      weight: user.weight,
+      sex: user.sex
+    },
+    token: await generateTokenUser(user.id)
+  }
+
+  return res.status(200).send(formated)
 }
 
-// FORGOT PASSWORD
 export const forgotPassword = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const email : string = req.body.body.email.trim() || req.body.email.trim()
+  const email : string = req.body.email
 
-    // VERIFY INPUTS
-    // eslint-disable-next-line
-      if (email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) === null) {
-      return res.status(400).send(status400('Email invalido!'))
-    }
-
-    const user: User | null = await prisma.user.findUnique({ where: { email } })
-
-    if (!user) {
-      return res.status(400).send(status400('Usuário não encontrado!'))
-    }
-
-    if (dateNow < user.passwordResetExpires) {
-      return res.status(400).send(status400('Email já foi enviado aguarde um tempo para solicitar novamente!'))
-    }
-
-    // DATE
-    dateNow.setHours(dateNow.getHours() + 2)
-
-    // TOKEN RESET PASSWORD
-    const token = randomBytes(20).toString('hex')
-
-    // SEND EMAIL
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
-
-    sgMail.send({
-      from: 'samuelcs131@gmail.com',
-      to: email,
-      subject: 'Recupere sua senha | NextFit',
-      html: htmlTemplateEmail(user, token)
-
-    }).then(
-      async () => {
-        await prisma.user.update({
-          where: { email },
-          data: {
-            passwordResetToken: token,
-            passwordResetExpires: dateNow
-          }
-        })
-
-        return res.status(204).send(status200('Link de alteração de senha enviado ao email!'))
-      }
-      // ERROR
-    ).catch(
-      async (error: any) => {
-        console.log(error)
-        return res.status(500).send(status500('Não foi possivel enviar email!'))
-      }
-    )
-    // ERROR
-  } catch (error) {
-    res.status(500).send(status500(error))
+  if (verifyEmail(email)) {
+    return res.status(400).send(statusCode({ status: 400 }))
   }
+
+  const [error, user] = await UserService.findUnique({ where: { email } })
+
+  if (!user || error) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  if ($date().toDate() < user.passwordResetExpires) {
+    return res.status(419).send(statusCode({ status: 419 }))
+  }
+
+  const [setApiKeyError] = await SendGridService.setApiKey(env().sendGrid)
+
+  if (setApiKeyError) {
+    return res.status(500).send(statusCode({ status: 500, error: setApiKeyError }))
+  }
+
+  const tokenResetPassword = randomBytes(20).toString('hex')
+
+  const [sendError] = await SendGridService.send({
+    from: 'samuelcs131@gmail.com',
+    to: email,
+    subject: 'Recupere sua senha | NextFit',
+    html: templateResetEmail(user, tokenResetPassword)
+  })
+
+  if (sendError) {
+    return res.status(500).send(statusCode({ status: 500, error }))
+  }
+
+  const [userUpdateError] = await UserService.update({
+    where: { email },
+    data: {
+      passwordResetToken: tokenResetPassword,
+      passwordResetExpires: $date().add(2, 'h').format()
+    }
+  })
+
+  if (userUpdateError) {
+    return res.status(422).send(statusCode({ status: 422 }))
+  }
+
+  res.status(204).send()
 }
 
-// RESET PASSWORD
 export const resetPassword = async (req: Request, res: Response) => {
-  try {
-    // PARAMS
-    const passwordResetToken: string = req.body.body.resetToken || req.body.resetToken
-    const password: string = req.body.body.password || req.body.password
-    const email: string = req.body.body.email || req.body.email
+  const passwordResetToken: string = req.body.resetToken
+  const { email, password }: User = req.body
 
-    if (password.length < 6 || password.length > 16) {
-      return res.status(400).send(status400('A senha deve contar mais de 6 caracteres e no máximo 16!'))
-    }
-
-    // VERIFY USER
-    const userData: User | null = await prisma.user.findFirst({ where: { email } })
-
-    if (!userData) {
-      return res.status(400).send(status400('Usuário não existe!'))
-    }
-
-    if (passwordResetToken !== userData?.passwordResetToken) {
-      return res.status(400).send(status400('Token de senha invalido!'))
-    }
-
-    if (dateNow > userData.passwordResetExpires) {
-      return res.status(400).send(status400('Token expirou, solicite novamente!'))
-    }
-
-    // TOKEN RESET PASSWORD
-    const token: string = randomBytes(20).toString('hex')
-
-    // HASH PASSWORD
-    const hashedPassword: string = await hash(password, 10)
-
-    // UPADTE PASSWORD
-    await prisma.user.update({
-      where: { email },
-      data: {
-        password: String(hashedPassword).trim(),
-        passwordResetToken: String(token).trim()
-      }
-
-      // RETURN
-    }).then(
-      () => {
-        return res.status(204).send(status200('Senha atualizada com sucesso!'))
-      }
-
-      // ERROR
-    ).catch(
-      (error) => {
-        return res.status(500).send(status500(error))
-      }
-    )
-
-    // ERROR
-  } catch (error) {
-    res.status(500).send(status500(error))
+  if (
+    verifyString([password]) ||
+    verifyEmail(email) ||
+    password.length < 6 || password.length > 16
+  ) {
+    return res.status(400).send(statusCode({ status: 400 }))
   }
+
+  const [userError, user] = await UserService.findFirst({ where: { email } })
+
+  if (!user || userError) {
+    return res.status(404).send(statusCode({ status: 404 }))
+  }
+
+  if (
+    passwordResetToken !== user.passwordResetToken ||
+    $date().toDate() > user.passwordResetExpires
+  ) {
+    return res.status(403).send(statusCode({ status: 403 }))
+  }
+
+  const token: string = randomBytes(20).toString('hex')
+
+  const hashedPassword: string = await hash(password, 10)
+
+  const [userUpdateError] = await UserService.update({
+    where: { email },
+    data: {
+      password: hashedPassword.trim(),
+      passwordResetToken: token.trim()
+    }
+  })
+
+  if (userUpdateError) {
+    return res.status(422).send(statusCode({ status: 422 }))
+  }
+
+  res.status(204).send()
 }

@@ -1,37 +1,30 @@
 import { Request, Response } from 'express'
-import { Muscles, PrismaClient } from '@prisma/client'
-import { status200, status400, status500 } from '@controllers/response/status'
+import { Muscle } from '@prisma/client'
+import * as MuscleService from '@services/prisma/muscle.service'
+import { statusCode } from '@utils/status'
+import { verifyString } from 'src/validators/valid'
 
-const prisma = new PrismaClient()
-
-// UPDATE MUSCLE
 export const updateMuscle = async (req: Request, res: Response) => {
-  try {
-    const { name, members }: Muscles = req.body.body || req.body
-    const muscleId: string = req.params.id
-    const inputs = [name, members, muscleId]
+  const { name, member }: Muscle = req.body
+  const muscleId: string = req.params.id
 
-    // VERIFY INPUTS
-    for (let num = 0; num < inputs.length; num++) {
-      if (inputs[num] === null || inputs[num] === undefined || String(inputs[num]).trim() === '') {
-        return res.status(400).send(status400('Preencha todos os campos!'))
-      }
-    }
-
-    try {
-      const muscles = await prisma.muscles.update({
-        where: { id: muscleId },
-        data: {
-          name: String(name).trim(),
-          members: String(members).trim()
-        }
-      })
-      res.status(200).send(muscles)
-      status200('Musculo atualizado com sucesso!')
-    } catch (error) {
-      res.status(400).send(status400('Músculo inexistente ou músculo já cadastrado!'))
-    }
-  } catch (error) {
-    res.status(500).send(status500(error))
+  if (verifyString([name, member, muscleId])) {
+    return res.status(400).send(statusCode({ status: 400 }))
   }
+
+  const args = {
+    where: { id: muscleId },
+    data: {
+      name: name.trim(),
+      member: member.trim()
+    }
+  }
+
+  const [error] = await MuscleService.update(args)
+
+  if (error) {
+    return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
+  }
+
+  res.status(200).send()
 }

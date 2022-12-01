@@ -5,11 +5,9 @@ import routes from '@routes/router'
 import corsConfig from '@config/cors'
 import cors from 'cors'
 import path from 'path'
+import { env } from '@config/envVariables'
 
 const app = express()
-
-// ENVIRONMENT VARIABLES
-const PORT = process.env.PORT
 
 // CONFIG MIDDLEWARE
 app.use(cors(corsConfig))
@@ -21,6 +19,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/', routes)
 
 // RUNNING SERVER
-app.listen(process.env.PORT, () => {
-  return console.log(`🚀 ${clc.cyan('[NextFit]')} Servidor rodando em http://localhost:${PORT} 🚀`)
+app.listen(env().port, () => {
+  return console.log(`🚀 ${clc.cyan('[NextFit]')} Servidor rodando em http://localhost:${env().port} 🚀`)
 })
