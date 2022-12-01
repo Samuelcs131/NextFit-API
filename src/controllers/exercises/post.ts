@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import { Exercises } from '@prisma/client'
+import { Exercise } from '@prisma/client'
 import { statusCode } from '@utils/status'
 import { verifyString } from 'src/validators/valid'
-import * as ExercisesService from '@services/prisma/exercises.service'
+import * as ExerciseService from '@services/prisma/exercise.service'
 
-export const createExercises = async (req: Request, res: Response) => {
-  const { name, img, muscleId }: Exercises = req.body
+export const createExercise = async (req: Request, res: Response) => {
+  const { name, img, muscleId }: Exercise = req.body
 
   if (verifyString([name, img, muscleId])) {
     return res.status(400).send(statusCode({ status: 400 }))
@@ -19,7 +19,7 @@ export const createExercises = async (req: Request, res: Response) => {
     }
   }
 
-  const [error, muscles] = await ExercisesService.create(args)
+  const [error, muscles] = await ExerciseService.create(args)
 
   if (error) {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as ExercisesService from '@services/prisma/exercises.service'
-import * as MusclesService from '@services/prisma/muscles.service'
+import * as ExerciseService from '@services/prisma/exercise.service'
+import * as MuscleService from '@services/prisma/muscle.service'
 
 export const getAllExercises = async (req: Request, res: Response) => {
-  const musclesPromisse = MusclesService.findMany()
-  const exercisesPromisse = ExercisesService.findMany()
+  const musclesPromisse = MuscleService.findMany()
+  const exercisesPromisse = ExerciseService.findMany()
 
   const [musclesResolved, exercisesResolved] =
   await Promise.all([musclesPromisse, exercisesPromisse])
@@ -22,7 +22,7 @@ export const getAllExercises = async (req: Request, res: Response) => {
       return ({
         id: exercise.id,
         muscle: muscles.find((muscle) => muscle.id === exercise.muscleId)?.name,
-        members: muscles.find((muscle) => muscle.id === exercise.muscleId)?.members,
+        members: muscles.find((muscle) => muscle.id === exercise.muscleId)?.member,
         name: exercise.name,
         img: exercise.img
       })
@@ -39,7 +39,7 @@ export const getExercisesById = async (req: Request, res: Response) => {
     where: { id: idExercises }
   }
 
-  const [error, exercises] = await ExercisesService.findUnique(args)
+  const [error, exercises] = await ExerciseService.findUnique(args)
 
   if (error) {
     return res.status(404).send(statusCode({ status: 404 }))

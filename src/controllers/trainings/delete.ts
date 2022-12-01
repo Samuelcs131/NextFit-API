@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as TrainingsService from '@services/prisma/trainings.service'
+import * as TrainingService from '@services/prisma/training.service'
 import { verifyString } from 'src/validators/valid'
 
 export const deleteTraining = async (req: Request, res: Response) => {
@@ -14,7 +14,7 @@ export const deleteTraining = async (req: Request, res: Response) => {
     where: { id: trainingId }
   }
 
-  const [error] = await TrainingsService.exclude(args)
+  const [error] = await TrainingService.exclude(args)
 
   if (error) {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))

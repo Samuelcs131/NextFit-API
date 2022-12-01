@@ -3,7 +3,7 @@ import { compare } from 'bcrypt'
 import { generateTokenUser } from '../utils/token/generateToken'
 import { verifyEmail, verifyString } from 'src/validators/valid'
 import { statusCode } from '@utils/status'
-import * as UsersService from '@services/prisma/users.service'
+import * as UserService from '@services/prisma/user.service'
 
 const auth = async (req: Request, res: Response) => {
   const email: string = req.body.email
@@ -11,12 +11,12 @@ const auth = async (req: Request, res: Response) => {
 
   if (
     verifyString([password]) ||
-      verifyEmail(email)
+    verifyEmail(email)
   ) {
     return res.status(400).send(statusCode({ status: 400 }))
   }
 
-  const [userError, user] = await UsersService.findUnique({
+  const [userError, user] = await UserService.findUnique({
     where: { email: email.trim() }
   })
 

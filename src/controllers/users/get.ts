@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
 import { verifyEmail, verifyString } from 'src/validators/valid'
-import * as UsersService from '@services/prisma/users.service'
+import * as UserService from '@services/prisma/user.service'
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  const [error, users] = await UsersService.findMany()
+  const [error, users] = await UserService.findMany()
 
   if (error) {
-    return res.status(404).send(statusCode({ status: 404 }))
+    return res.status(404).send(statusCode({ status: 404, error: error.meta?.message }))
   }
 
   const formated = users.map(user => {
@@ -32,7 +32,7 @@ export const getUserByEmail = async (req: Request, res: Response) => {
 
   const args = { where: { email: email.trim() } }
 
-  const [error, user] = await UsersService.findUnique(args)
+  const [error, user] = await UserService.findUnique(args)
 
   if (error || user === null) {
     return res.status(404).send(statusCode({ status: 404, error: error?.meta?.message }))
@@ -48,7 +48,7 @@ export const getUserByEmail = async (req: Request, res: Response) => {
     passwordResetToken: user.passwordResetToken
   }
 
-  res.status(200).send(formated)
+  return res.status(200).send(formated)
 }
 
 export const getUserByToken = async (req: Request, res: Response) => {
@@ -62,7 +62,7 @@ export const getUserByToken = async (req: Request, res: Response) => {
     where: { id: tokenAuthUser }
   }
 
-  const [error, users] = await UsersService.findUnique(args)
+  const [error, users] = await UserService.findUnique(args)
 
   if (error) {
     return res.status(404).send(statusCode({ status: 404, error: error.meta?.message }))

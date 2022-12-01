@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as TrainingsService from '@services/prisma/trainings.service'
-import * as ExercisesService from '@services/prisma/exercises.service'
-import * as MusclesService from '@services/prisma/muscles.service'
+import * as TrainingService from '@services/prisma/training.service'
+import * as ExerciseService from '@services/prisma/exercise.service'
+import * as MuscleService from '@services/prisma/muscle.service'
 import { Prisma } from '@prisma/client'
 import { $date, reverseDateFormat } from '@utils/date/date-functions'
 import { verifyString } from 'src/validators/valid'
 
 export const getAllTrainings = async (req: Request, res: Response) => {
-  const [error, training] = await TrainingsService.findMany()
+  const [error, training] = await TrainingService.findMany()
 
   if (error) {
     return res.status(404).send(statusCode({ status: 404 }))
@@ -24,9 +24,9 @@ export const getTrainingById = async (req: Request, res: Response) => {
     where: { id: trainingId }
   }
 
-  const trainingPromisse = TrainingsService.findUnique(args)
-  const exercisesPromisse = ExercisesService.findMany()
-  const musclesPromisse = MusclesService.findMany()
+  const trainingPromisse = TrainingService.findUnique(args)
+  const exercisesPromisse = ExerciseService.findMany()
+  const musclesPromisse = MuscleService.findMany()
 
   const [trainingsResponse, exercisesResponse, musclesResponse] =
   await Promise.all([trainingPromisse, exercisesPromisse, musclesPromisse])
@@ -41,8 +41,8 @@ export const getTrainingById = async (req: Request, res: Response) => {
 
   const formated = {
     id: training?.id,
-    exercise: exercises.find((exercise) => exercise.id === training?.exercisesId)?.name,
-    muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training?.exercisesId)?.muscleId)?.name,
+    exercise: exercises.find((exercise) => exercise.id === training?.exerciseId)?.name,
+    muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training?.exerciseId)?.muscleId)?.name,
     date: training?.date,
     series: training?.series,
     repetitions: training?.repetitions,
@@ -60,9 +60,9 @@ export const getAllTrainingsByIdUser = async (req: Request, res: Response) => {
   const args = {
     where: { userId }
   }
-  const trainingsPromisse = TrainingsService.findMany(args)
-  const exercisesPromisse = ExercisesService.findMany()
-  const musclesPromisse = MusclesService.findMany()
+  const trainingsPromisse = TrainingService.findMany(args)
+  const exercisesPromisse = ExerciseService.findMany()
+  const musclesPromisse = MuscleService.findMany()
 
   const [trainingsResponse, exercisesResponse, musclesResponse] =
       await Promise.all([trainingsPromisse, exercisesPromisse, musclesPromisse])
@@ -78,8 +78,8 @@ export const getAllTrainingsByIdUser = async (req: Request, res: Response) => {
   res.status(200).send(trainings.map((training) => {
     return ({
       id: training.id,
-      exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
-      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
+      exercise: exercises.find((exercise) => exercise.id === training.exerciseId)?.name,
+      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exerciseId)?.muscleId)?.name,
       date: training.date,
       series: training.series,
       repetitions: training.repetitions,
@@ -117,9 +117,9 @@ export const getTrainingsOfMonthByIdUser = async (req: Request, res: Response) =
     }
   }
 
-  const trainingsPromisse = TrainingsService.findMany(args)
-  const exercisesPromisse = ExercisesService.findMany()
-  const musclesPromisse = MusclesService.findMany()
+  const trainingsPromisse = TrainingService.findMany(args)
+  const exercisesPromisse = ExerciseService.findMany()
+  const musclesPromisse = MuscleService.findMany()
 
   const [trainingsResponse, exercisesResponse, musclesResponse] = await Promise.all([trainingsPromisse, exercisesPromisse, musclesPromisse])
 
@@ -134,8 +134,8 @@ export const getTrainingsOfMonthByIdUser = async (req: Request, res: Response) =
   const formated = trainings.map((training) => {
     return ({
       id: training.id,
-      exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
-      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
+      exercise: exercises.find((exercise) => exercise.id === training.exerciseId)?.name,
+      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exerciseId)?.muscleId)?.name,
       date: training.date,
       series: training.series,
       repetitions: training.repetitions,
@@ -176,9 +176,9 @@ export const getTrainingsBetweenDatesByUserId = async (req: Request, res: Respon
     }
   }
 
-  const trainingsPromisse = TrainingsService.findMany(args)
-  const exercisesPromisse = ExercisesService.findMany()
-  const musclesPromisse = MusclesService.findMany()
+  const trainingsPromisse = TrainingService.findMany(args)
+  const exercisesPromisse = ExerciseService.findMany()
+  const musclesPromisse = MuscleService.findMany()
 
   const [trainingsResponse, exercisesResponse, musclesResponse] = await Promise.all([trainingsPromisse, exercisesPromisse, musclesPromisse])
 
@@ -193,8 +193,8 @@ export const getTrainingsBetweenDatesByUserId = async (req: Request, res: Respon
   const formated = trainings.map((training) => {
     return ({
       id: training.id,
-      exercise: exercises.find((exercise) => exercise.id === training.exercisesId)?.name,
-      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exercisesId)?.muscleId)?.name,
+      exercise: exercises.find((exercise) => exercise.id === training.exerciseId)?.name,
+      muscle: muscles.find((muscle) => muscle.id === exercises.find((exercise) => exercise.id === training.exerciseId)?.muscleId)?.name,
       date: training.date,
       series: training.series,
       repetitions: training.repetitions,

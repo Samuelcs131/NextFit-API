@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
-import { Muscles } from '@prisma/client'
-import * as MusclesService from '@services/prisma/muscles.service'
+import { Muscle } from '@prisma/client'
+import * as MuscleService from '@services/prisma/muscle.service'
 import { statusCode } from '@utils/status'
 import { verifyString } from 'src/validators/valid'
 
 export const updateMuscle = async (req: Request, res: Response) => {
-  const { name, members }: Muscles = req.body
+  const { name, member }: Muscle = req.body
   const muscleId: string = req.params.id
 
-  if (verifyString([name, members, muscleId])) {
+  if (verifyString([name, member, muscleId])) {
     return res.status(400).send(statusCode({ status: 400 }))
   }
 
@@ -16,15 +16,15 @@ export const updateMuscle = async (req: Request, res: Response) => {
     where: { id: muscleId },
     data: {
       name: name.trim(),
-      members: members.trim()
+      member: member.trim()
     }
   }
 
-  const [error, muscles] = await MusclesService.update(args)
+  const [error] = await MuscleService.update(args)
 
   if (error) {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
   }
 
-  res.status(200).send(muscles)
+  res.status(200).send()
 }

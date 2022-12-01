@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
-import * as MusclesService from '@services/prisma/muscles.service'
+import * as MuscleService from '@services/prisma/muscle.service'
 
 export const getAllMuscles = async (req: Request, res: Response) => {
-  const [error, muscles] = await MusclesService.findMany()
+  const [error, muscles] = await MuscleService.findMany()
 
   if (error) {
     return res.status(404).send(statusCode({ status: 404 }))
@@ -17,7 +17,7 @@ export const getMuscleById = async (req: Request, res: Response) => {
 
   const args = { where: { id: muscleId } }
 
-  const [error, muscles] = await MusclesService.findFirst(args)
+  const [error, muscles] = await MuscleService.findFirst(args)
 
   if (error) {
     return res.status(404).send(statusCode({ status: 404 }))

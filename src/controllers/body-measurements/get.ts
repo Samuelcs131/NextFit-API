@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import { statusCode } from '@utils/status'
 import { verifyString } from 'src/validators/valid'
-import * as BodyMeasurementsService from '@services/prisma/bodyMeasurements.service'
+import * as BodyMeasurementService from '@services/prisma/bodyMeasurement.service'
 
 export const getAllBodyMeasurements = async (req: Request, res: Response) => {
-  const [error, bodyMeasurements] = await BodyMeasurementsService.findMany()
+  const [error, bodyMeasurements] = await BodyMeasurementService.findMany()
 
   if (error) {
     res.status(404).send(statusCode({ status: 404, error: error.meta?.message }))
@@ -24,7 +24,7 @@ export const getBodyMeasurementById = async (req: Request, res: Response) => {
     where: { id: measurementId }
   }
 
-  const [error, bodymeasurement] = await BodyMeasurementsService.findUnique(args)
+  const [error, bodymeasurement] = await BodyMeasurementService.findUnique(args)
 
   if (error) {
     res.status(404).send(statusCode({ status: 404, error: error.meta?.message }))
@@ -49,7 +49,7 @@ export const getAllBodyMeasurementsByIdUser = async (req: Request, res: Response
     where: { userId }
   }
 
-  const [error, bodyMeasurements] = await BodyMeasurementsService.findMany(args)
+  const [error, bodyMeasurements] = await BodyMeasurementService.findMany(args)
 
   if (error) {
     return res.status(404).send(statusCode({ status: 404 }))

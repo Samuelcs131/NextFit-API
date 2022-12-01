@@ -1,22 +1,20 @@
 import { Request, Response } from 'express'
 import { Training } from '@prisma/client'
-import { verifyArray, verifyNumber, verifyString } from 'src/validators/valid'
+import { verifyNumber, verifyString } from 'src/validators/valid'
 import { statusCode } from '@utils/status'
 import { $date, reverseDateFormat } from '@utils/date/date-functions'
-import * as TrainingsService from '@services/prisma/trainings.service'
+import * as TrainingsService from '@services/prisma/training.service'
 
 export const updateTraining = async (req: Request, res: Response) => {
   const trainingId: string = req.params.id
-  const { weight, series, interval, exercisesId }: Training = req.body
-  const repetitions: Array<number> = req.body.repetitions
+  const { weight, series, interval, exerciseId, repetitions }: Training = req.body
   const date = $date(reverseDateFormat(req.body.date || ''), true).format()
 
   if (
-    verifyString([exercisesId, trainingId]) ||
-    verifyNumber([weight, series, interval]) ||
+    verifyString([exerciseId, trainingId]) ||
+    verifyNumber([weight, series, interval, repetitions]) ||
     !$date(date, true).isValid() ||
-    verifyArray(repetitions, 'number') ||
-    repetitions.length !== series
+    repetitions > 99
   ) {
     return res.status(400).send(statusCode({ status: 400 }))
   }
@@ -24,7 +22,7 @@ export const updateTraining = async (req: Request, res: Response) => {
   const args = {
     where: { id: trainingId },
     data: {
-      exercisesId: exercisesId.trim(),
+      exerciseId: exerciseId.trim(),
       weight,
       repetitions,
       series,
@@ -39,5 +37,5 @@ export const updateTraining = async (req: Request, res: Response) => {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
   }
 
-  res.status(204)
+  res.status(204).send()
 }

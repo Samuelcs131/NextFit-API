@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { User } from '@prisma/client'
 import { statusCode } from '@utils/status'
 import { verifyEmail, verifyNumber, verifyString } from 'src/validators/valid'
-import * as UsersService from '@services/prisma/users.service'
+import * as UsersService from '@services/prisma/user.service'
 
 export const updateUser = async (req: Request, res: Response) => {
   const userId: string = req.params.userId
@@ -38,5 +38,5 @@ export const updateUser = async (req: Request, res: Response) => {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
   }
 
-  res.status(204)
+  res.status(204).send()
 }
