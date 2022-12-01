@@ -76,8 +76,8 @@ routes.put('/muscles/:id', resolver(musclesPut.updateMuscle))
 // EXERCISES
 routes.get('/exercises', resolver(exercisesGet.getAllExercises))
 routes.get('/exercises/:id', resolver(exercisesGet.getExercisesById))
-routes.post('/exercises', resolver(exercisesPost.createExercises))
-routes.put('/exercises/:id', resolver(exercisesPut.updateExercises))
+routes.post('/exercises', resolver(exercisesPost.createExercise))
+routes.put('/exercises/:id', resolver(exercisesPut.updateExercise))
 routes.delete('/exercises/:id', resolver(exercisesDelete.deleteExercises))
 
 // AUTH
