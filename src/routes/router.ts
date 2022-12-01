@@ -1,5 +1,5 @@
-import express, { Request, Response } from 'express'
-import path from 'path'
+import express from 'express'
+import { resolver } from '@middlewares/adapter/resolver'
 // AUTH
 import auth from '@controllers/auth'
 import { authMiddleware } from 'src/middlewares/auth'
@@ -31,17 +31,12 @@ import * as exercisesDelete from '@controllers/exercises/delete'
 // SWAGGER
 import swaggerUi from 'swagger-ui-express'
 import { swaggerFile } from '@services/swagger'
-import { resolver } from '@middlewares/adapter/resolver'
 
 // CONTROLLERS
 const routes = express.Router()
 
 // INDEX
 routes.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
-routes.get('/', (req: Request, res: Response) => {
-  res.sendFile(path.resolve(__dirname, '..', '..', 'public/page/index.html'))
-})
 
 // USERS
 routes.get('/users', resolver(usersGet.getAllUsers))
