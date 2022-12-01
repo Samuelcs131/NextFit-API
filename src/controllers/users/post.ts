@@ -5,29 +5,27 @@ import { generateTokenUser } from '@utils/token/generateToken'
 import { randomBytes } from 'crypto'
 import { templateResetEmail } from '@resources/template/resetEmail'
 import { statusCode } from '@utils/status'
-import { verifyEmail, verifyNumber, verifyString } from 'src/validators/valid'
+import { verifyEmail, verifyNumber, verifyPassword, verifyString, verifyUserType, verifyUserSex } from 'src/validators/valid'
 import { $date } from '@utils/date/date-functions'
-import * as UsersService from '@services/prisma/users.service'
+import * as UserService from '@services/prisma/user.service'
 import * as SendGridService from '@services/sendGrid/sendGrid.service'
 import { env } from '@config/envVariables'
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, lastName, email, password, height, weight, sex }: User = req.body
-  const optionsSex = ['m', 'f']
+  const { name, lastName, email, password, height, weight, sex, typeUser }: User = req.body
 
   if (
-    verifyString([name, lastName, sex, password]) ||
+    verifyString([name, lastName, password]) ||
     verifyNumber([height, weight]) ||
     verifyEmail(email) ||
-    password.length < 8 ||
-    password.length > 32 ||
-    (/\s/g).test(password) === true ||
-    !optionsSex.includes(sex)
+    verifyUserSex(sex) ||
+    verifyPassword(password) ||
+    verifyUserType(typeUser)
   ) {
     return res.status(400).send(statusCode({ status: 400 }))
   }
 
-  const [verifyEmailError, verifyEmailExists] = await UsersService.findMany({ where: { email } })
+  const [verifyEmailError, verifyEmailExists] = await UserService.findMany({ where: { email } })
 
   if (verifyEmailError) {
     return res.status(404).send(statusCode({ status: 404 }))
@@ -44,16 +42,17 @@ export const createUser = async (req: Request, res: Response) => {
       name: name.trim(),
       lastName: lastName.trim(),
       email: email.trim(),
+      typeUser,
       height,
       password: hashedPassword.trim(),
-      sex: sex.trim(),
+      sex,
       weight,
       passwordResetExpires: $date().format(),
       passwordResetToken: 'initial'
     }
   }
 
-  const [error, user] = await UsersService.create(args)
+  const [error, user] = await UserService.create(args)
 
   if (error) {
     return res.status(422).send(statusCode({ status: 422, error: error.meta?.message }))
@@ -82,7 +81,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     return res.status(400).send(statusCode({ status: 400 }))
   }
 
-  const [error, user] = await UsersService.findUnique({ where: { email } })
+  const [error, user] = await UserService.findUnique({ where: { email } })
 
   if (!user || error) {
     return res.status(404).send(statusCode({ status: 404 }))
@@ -111,7 +110,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     return res.status(500).send(statusCode({ status: 500, error }))
   }
 
-  const [userUpdateError] = await UsersService.update({
+  const [userUpdateError] = await UserService.update({
     where: { email },
     data: {
       passwordResetToken: tokenResetPassword,
@@ -123,7 +122,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     return res.status(422).send(statusCode({ status: 422 }))
   }
 
-  res.status(204)
+  res.status(204).send()
 }
 
 export const resetPassword = async (req: Request, res: Response) => {
@@ -138,7 +137,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     return res.status(400).send(statusCode({ status: 400 }))
   }
 
-  const [userError, user] = await UsersService.findFirst({ where: { email } })
+  const [userError, user] = await UserService.findFirst({ where: { email } })
 
   if (!user || userError) {
     return res.status(404).send(statusCode({ status: 404 }))
@@ -155,7 +154,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
   const hashedPassword: string = await hash(password, 10)
 
-  const [userUpdateError] = await UsersService.update({
+  const [userUpdateError] = await UserService.update({
     where: { email },
     data: {
       password: hashedPassword.trim(),
@@ -167,5 +166,5 @@ export const resetPassword = async (req: Request, res: Response) => {
     return res.status(422).send(statusCode({ status: 422 }))
   }
 
-  return res.status(204)
+  res.status(204).send()
 }
